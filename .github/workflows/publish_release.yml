@@ -1,0 +1,53 @@
+﻿# Publish new release on PyPI.
+name: "Publish release"
+
+on: ["workflow_dispatch"]
+
+jobs:
+
+  build:
+    runs-on: "ubuntu-latest"
+    steps:
+
+      - name: "Check out code."
+        uses: "actions/checkout@v6"
+
+      - name: "Install Python."
+        uses: "actions/setup-python@v6"
+        with:
+          python-version: "3.14"
+
+      - name: "Install UV."
+        uses: "astral-sh/setup-uv@v7"
+
+      - name: "Build wheel."
+        run:  "uv build --wheel --out-dir build/wheel"
+
+      - name: "Store wheel."
+        uses: "actions/upload-artifact@v6"
+        with:
+          name: "wheel"
+          path: "build/wheel"
+
+
+  publish:
+    needs:
+      - "build"
+    runs-on: "ubuntu-latest"
+    environment:
+      name: "PyPI"
+      url:  "https://pypi.org/p/Ked"
+    permissions:
+        id-token: "write"
+    steps:
+
+      - name: "Download wheel."
+        uses: "actions/download-artifact@v7"
+        with:
+          name: "wheel"
+          path: "build/wheel"
+
+      - name: "Publish to PyPI."
+        uses: "pypa/gh-action-pypi-publish@release/v1"
+        with:
+          packages-dir: "build/wheel"

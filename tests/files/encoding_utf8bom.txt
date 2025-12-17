@@ -1,0 +1,4 @@
+﻿This file is UTF-8 encoded and starts with a byte-order mark.
+
+Some arrows: ← ↑ → ↓ ↔ ↕ ↖ ↗ ↘ ↙
+Some emojis: 😂 ⬆ ️⌛ ❤️ 👌 🎶 😎 🤷‍ 📂 🐈

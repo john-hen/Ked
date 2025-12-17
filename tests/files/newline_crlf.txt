@@ -1,0 +1,4 @@
+﻿All lines in this file end with Windows-like line endings.
+
+That is, with a carriage-return character followed by a line-feed character,
+a.k.a. CR + LF or ASCII codes 13 and 10.

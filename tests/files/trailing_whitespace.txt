@@ -1,0 +1,9 @@
+﻿This file contains lines with trailing white-space. Two spaces at the end of
+this very paragraph.  
+
+And one character at the end of this one. 
+
+The next line contains one tab, two spaces, another tab, and one space.
+	  	 
+The file also ends with two blank lines.
+

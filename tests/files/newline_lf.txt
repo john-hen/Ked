@@ -1,0 +1,3 @@
+﻿All lines in this file end with Unix-like line endings.
+
+That is with only a line-feed character, a.k.a. LF or ASCII code 10.

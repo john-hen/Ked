@@ -1,0 +1,5 @@
+﻿Lines in this file mix Windows-like and Unix-like line endings.
+
+This paragraph ends with CRLF.
+
+This paragraph ends with LF.
