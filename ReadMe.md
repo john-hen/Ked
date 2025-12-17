@@ -77,3 +77,6 @@ not suppressing certain message categories in the `textual console` command.
 [![release](
     https://img.shields.io/pypi/v/Ked.svg?label=release)](
     https://pypi.python.org/pypi/Ked)
+[![license](
+    https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-nd.eu.svg)](
+    https://creativecommons.org/licenses/by-nc-nd/4.0)
