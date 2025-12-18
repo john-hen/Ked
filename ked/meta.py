@@ -1,4 +1,4 @@
-"""Meta information about the application"""
+﻿"""Meta information about the application"""
 
 from importlib.metadata import metadata
 

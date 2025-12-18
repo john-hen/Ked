@@ -1,4 +1,4 @@
-"""Configuration settings of the application"""
+﻿"""Configuration settings of the application"""
 
 from . import meta
 

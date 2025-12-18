@@ -1,4 +1,4 @@
-"""Command-line interface of the application"""
+﻿"""Command-line interface of the application"""
 
 from .    import meta
 from .    import config

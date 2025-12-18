@@ -1,4 +1,4 @@
-"""Editor widget central to the application"""
+﻿"""Editor widget central to the application"""
 
 from . import bindings
 

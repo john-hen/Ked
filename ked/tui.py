@@ -1,4 +1,4 @@
-"""Text-based user interface of the application"""
+﻿"""Text-based user interface of the application"""
 
 from .          import meta
 from .          import bindings

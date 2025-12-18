@@ -1,4 +1,4 @@
-"""
+﻿"""
 Defines the key bindings of application and widgets.
 
 The application and editor widgets don't inherit the default key bindings, as

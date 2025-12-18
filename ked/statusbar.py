@@ -1,4 +1,4 @@
-"""Custom footer showing key bindings and editor status"""
+﻿"""Custom footer showing key bindings and editor status"""
 
 from textual.widgets         import Footer
 from textual.widgets._footer import FooterKey

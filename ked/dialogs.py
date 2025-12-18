@@ -1,4 +1,4 @@
-"""Pop-up dialogs used throughout the app"""
+﻿"""Pop-up dialogs used throughout the app"""
 
 from . import bindings
 
