@@ -172,7 +172,7 @@ def infer_language(file: Path) -> str:
             return 'css'
         case '.js':
             return 'javascript'
-        case '.sh' | '.bash' | '.zsh':
+        case '.sh' | '.bash' | '.zsh' | '.fish':
             return 'bash'
         case '.py' | '.pyw':
             return 'python'
