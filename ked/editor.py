@@ -14,7 +14,7 @@ from pathlib import Path
 
 
 class Editor(TextArea, inherit_bindings=False):
-    """Widget for editing a file."""
+    """Main widget for editing a file"""
 
     file: reactive[Path | None] = reactive(None)
     """The file being edited."""

@@ -11,7 +11,7 @@ from textual.app        import ComposeResult
 
 
 class UnsavedFile(ModalScreen[str]):
-    """Dialog shown when user want to quit but file has not been saved."""
+    """Dialog shown when quitting and file has not been saved."""
 
     BINDINGS = bindings.horizontal_buttons
 

@@ -19,7 +19,7 @@ from collections.abc import Iterable
 
 
 class TUI(App[str], inherit_bindings=False):
-    """Text-based user interface"""
+    """Text-based user interface of the application"""
 
     file: reactive[Path | None] = reactive(None)
     """The file being edited."""

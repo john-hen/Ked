@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 class Statusbar(Footer):
-    """Footer that shows key bindings and status info about edited file."""
+    """Footer showing key bindings and status of edited file"""
 
     file: reactive[Path | None] = reactive(None)
     """The file being edited."""

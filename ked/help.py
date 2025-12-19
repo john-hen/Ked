@@ -54,10 +54,9 @@ class Help(ModalScreen):
 
 
 class KeyBindings(Static):
-    """Widget displaying the application's key bindings."""
+    """Widget displaying a table with the key bindings"""
 
     def render(self) -> Table:
-        """Renders a table list key bindings and their descriptions."""
         editor = self.app.query_exactly_one('#editor')
         screen = editor.screen
         app_bindings    = {}
