@@ -33,23 +33,7 @@ to edit a file. Run `ked --help` to list further command-line options. Press
 <kbd>F1</kbd> in the app for help on interactive usage.
 
 
-## Why Ked?
-
-I refuse to use [Vim] for the sake of my muscle memory, and [Nano] won't let me
-rebind all the keys that I want.
-
-As for the name, no particular reason. It was available on [PyPI], first and
-foremost, is quick to type, and has "ed" in it, like "edit" or "editor".
-
-[Vim]:  https://neovim.io
-[Nano]: https://www.nano-editor.org
-[PyPI]: https://pypi.org
-
-
 ## Development
-
-Ked is built in Python on top of the excellent TUI framework [Textual]. It uses
-[Cyclopts] for the command-line interface.
 
 Debugging a TUI application can be tricky as the user interface blocks the
 terminal. But it is often sufficient to look at log output. As explained [in
@@ -69,8 +53,6 @@ development console. The `uv run` part of the commands can be left out if the
 virtual dev environment has been activated. More verbosity can be achieved by
 not suppressing certain message categories in the `textual console` command.
 
-[Textual]:     https://textual.textualize.io
-[Cyclopts]:    https://cyclopts.readthedocs.io
 [textual-log]: https://textual.textualize.io/guide/devtools/#textual-log
 
 

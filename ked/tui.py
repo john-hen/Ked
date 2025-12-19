@@ -6,6 +6,7 @@ from .          import dialogs
 from .editor    import Editor
 from .statusbar import Statusbar
 from .help      import Help
+from .about     import About
 
 from textual.app       import App
 from textual.app       import ComposeResult
@@ -73,6 +74,12 @@ class TUI(App[str], inherit_bindings=False):
                 self.action_help,
             ),
             (
+                'About',
+                'Show information about the application.',
+                'about',
+                self.action_about,
+            ),
+            (
                 'Theme',
                 'Change the application theme.',
                 'change_theme',
@@ -119,6 +126,10 @@ class TUI(App[str], inherit_bindings=False):
     def action_help(self) -> None:
         """Shows the Help screen."""
         self.app.push_screen(Help())
+
+    def action_about(self) -> None:
+        """Shows the About screen."""
+        self.app.push_screen(About())
 
     def action_screenshot(self,  filename: str = None, path: str = None):
         """Saves a screenshot of the app in the current folder."""
