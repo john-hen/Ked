@@ -48,8 +48,14 @@ class TUI(App[str], inherit_bindings=False):
         )
 
     def get_key_display(self, binding: Binding) -> str:
-        """Shows key bindings in upper case, not the default lower case."""
-        return super().get_key_display(binding).upper()
+        """Formats how key bindings are displayed throughout the app."""
+        display_text = (
+            super().get_key_display(binding)
+            .title()
+            .replace('Pgup', 'PgUp')
+            .replace('Pgdn', 'PgDn')
+        )
+        return display_text
 
     def get_system_commands(self, screen: Screen) -> Iterable[SystemCommand]:
         """Populates command palette."""
