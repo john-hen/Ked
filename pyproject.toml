@@ -18,6 +18,7 @@ license-files = ['license.txt']
 requires-python = '>= 3.11'
 dependencies = [
     'Textual[syntax] >= 6',
+    'Rich            >= 14',
     'Cyclopts        >= 4',
     'Ruamel-Yaml     >= 0.18',
 ]

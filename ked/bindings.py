@@ -29,6 +29,14 @@ application = [
         id          = 'quit_app',
     ),
     Binding(
+        key         = 'f1',
+        action      = 'help',
+        description = 'Help',
+        tooltip     = 'Show help screen.',
+        priority    = True,
+        id          = 'help',
+    ),
+    Binding(
         key         = 'ctrl+p',
         action      = 'command_palette',
         description = 'Commands',

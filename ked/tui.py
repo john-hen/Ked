@@ -5,6 +5,7 @@ from .          import bindings
 from .          import dialogs
 from .editor    import Editor
 from .statusbar import Statusbar
+from .help      import Help
 
 from textual.app       import App
 from textual.app       import ComposeResult
@@ -52,39 +53,32 @@ class TUI(App[str], inherit_bindings=False):
 
     def get_system_commands(self, screen: Screen) -> Iterable[SystemCommand]:
         """Populates command palette."""
-        commands = []
-        commands.append((
-            'Quit',
-            'Quit the application.',
-            'quit',
-            self.action_quit,
-        ))
-        if screen.query('HelpPanel'):
-            commands.append((
-                'Keys',
-                'Hide help panel with key bindings.',
-                'hide_help_panel',
-                self.action_hide_help_panel,
-            ))
-        else:
-            commands.append((
-                'Keys',
-                'Show help panel with key bindings.',
-                'show_help_panel',
-                self.action_show_help_panel,
-            ))
-        commands.append((
-            'Theme',
-            'Change the application theme.',
-            'change_theme',
-            self.action_change_theme,
-        ))
-        commands.append((
-            'Screenshot',
-            'Save SVG image of screen in current folder.',
-            'screenshot',
-            lambda: self.set_timer(0.1, self.action_screenshot),
-        ))
+        commands = (
+            (
+                'Quit',
+                'Quit the application.',
+                'quit',
+                self.action_quit,
+            ),
+            (
+                'Help',
+                'Show help screen with key bindings.',
+                'help',
+                self.action_help,
+            ),
+            (
+                'Theme',
+                'Change the application theme.',
+                'change_theme',
+                self.action_change_theme,
+            ),
+            (
+                'Screenshot',
+                'Save SVG image of screen in current folder.',
+                'screenshot',
+                lambda: self.set_timer(0.1, self.action_screenshot),
+            ),
+        )
         actions_to_bindings = {
             binding.action: binding
             for (_, binding, enabled, _) in screen.active_bindings.values()
@@ -115,6 +109,10 @@ class TUI(App[str], inherit_bindings=False):
         """Event triggered when cursor was moved in editor."""
         editor = self.query_exactly_one('#editor', expect_type=Editor)
         self.cursor = editor.cursor_location
+
+    def action_help(self) -> None:
+        """Shows the Help screen."""
+        self.app.push_screen(Help())
 
     def action_screenshot(self,  filename: str = None, path: str = None):
         """Saves a screenshot of the app in the current folder."""
