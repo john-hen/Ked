@@ -155,6 +155,13 @@ def detect_encoding(file: Path) -> str:
 
 def infer_language(file: Path) -> str:
     """Infers the syntax-highlighting language from the file extension."""
+    match file.stem:
+        case '.profile':
+            return 'bash'
+        case '.bashrc' | '.bash_logout':
+            return 'bash'
+        case '.zshrc':
+            return 'bash'
     match file.suffix:
         case '.md':
             return 'markdown'
@@ -186,5 +193,4 @@ def infer_language(file: Path) -> str:
             return 'java'
         case '.kt' | '.kts':
             return 'kotlin'
-        case _:
-            return ''
+    return ''
