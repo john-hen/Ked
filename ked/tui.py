@@ -48,6 +48,9 @@ class TUI(App[str], inherit_bindings=False):
             cursor   = TUI.cursor,
         )
 
+    def on_mount(self):
+        self.theme = 'flexoki'
+
     def get_key_display(self, binding: Binding) -> str:
         """Formats how key bindings are displayed throughout the app."""
         display_text = (
