@@ -122,7 +122,43 @@ class Editor(TextArea, inherit_bindings=False):
     def action_trim_whitespace(self):
         """Trims trailing white-space characters."""
         self.log('Trimming trailing white-space characters.')
-        self.notify('Trimming white-space has yet to be implemented.')
+        changed = False
+
+        trims = 0
+        for n in range(self.document.line_count):
+            line = self.document.get_line(n)
+            trimmed = line.rstrip(' \t')
+            if trimmed != line:
+                self.delete(start=(n, len(trimmed)), end=(n, len(line)))
+                trims += 1
+        if trims > 0:
+            noun = 'line' if trims == 1 else 'lines'
+            self.notify(f'Trimmed trailing white-space on {trims} {noun}.')
+            changed = True
+
+        n = self.document.line_count - 1
+        last_line = self.document.get_line(n)
+        if last_line != '':
+            self.insert('\n', location=(n, len(last_line)))
+            self.notify('Appended a blank line.')
+            changed = True
+
+        n = self.document.line_count - 2
+        m = n
+        while self.document.get_line(m) == '' and m >= 0:
+            m -= 1
+        if (m != n):
+            self.delete(start=(m+1, 0), end=(n+1, 0))
+            noun = 'line' if n - m == 1 else 'lines'
+            self.notify(f'Deleted {n - m} trailing blank {noun}.')
+            changed = True
+
+        if not changed:
+            self.notify('No trailing white-space to trim.')
+        else:
+            self.move_cursor(self.cursor_location)
+            self.post_message(self.CursorMoved())
+            self.refresh_bindings()
 
     def action_toggle_wrapping(self):
         """Toggles the soft-wrapping of lines."""
