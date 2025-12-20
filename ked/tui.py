@@ -95,12 +95,13 @@ class TUI(App[str], inherit_bindings=False):
 
     def get_system_commands(self, screen: Screen) -> Iterable[SystemCommand]:
         """Populates command palette."""
+        editor = self.query_exactly_one('#editor')
         commands = (
             (
-                'Quit',
-                'Quit the application.',
-                'quit',
-                self.action_quit,
+                'About',
+                'Show information about the application.',
+                'about',
+                self.action_about,
             ),
             (
                 'Help',
@@ -109,10 +110,16 @@ class TUI(App[str], inherit_bindings=False):
                 self.action_help,
             ),
             (
-                'About',
-                'Show information about the application.',
-                'about',
-                self.action_about,
+                'Quit',
+                'Quit the application.',
+                'quit',
+                self.action_quit,
+            ),
+            (
+                'Trim',
+                'Trim trailing white-space.',
+                'trim_whitespace',
+                editor.action_trim_whitespace,
             ),
             (
                 'Theme',
