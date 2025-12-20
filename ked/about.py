@@ -35,18 +35,13 @@ intentionally simple, while its default key bindings resemble those of desktop
 applications.
 
 
-### License
+### Credits
 
-Ked is licensed [CC-BY-NC-ND-4.0], i.e. under a Creative Commons license that
-allows non-commercial use and distribution, but requires attribution, forbids
-commercial use and derivatives.
+Ked is built in Python on top of the excellent TUI framework [Textual]. It uses
+[Cyclopts] for the command-line interface.
 
-It is *not* an open-source license. But the source code is publicly available.
-I (the author) am currently not looking for contributions. I may (or may not)
-move to a more permissive license once the application is more mature. But
-first and foremost, this is a personal project.
-
-[CC-BY-NC-ND-4.0]: https://creativecommons.org/licenses/by-nc-nd/4.0
+[Textual]:  https://textual.textualize.io
+[Cyclopts]: https://cyclopts.readthedocs.io
 
 
 ### Why Ked?
@@ -63,13 +58,18 @@ in it, as in "edit" or "editor".
 [PyPI]: https://pypi.org
 
 
-### Credits
+### License
 
-Ked is built in Python on top of the excellent TUI framework [Textual]. It uses
-[Cyclopts] for the command-line interface.
+Ked is licensed [CC-BY-NC-ND-4.0], i.e. under a Creative Commons license that
+allows non-commercial use and distribution, but requires attribution, forbids
+commercial use and derivatives.
 
-[Textual]:     https://textual.textualize.io
-[Cyclopts]:    https://cyclopts.readthedocs.io
+It is *not* an open-source license. But the source code is publicly available.
+I (the author) am currently not looking for contributions. I may (or may not)
+move to a more permissive license once the application is more mature. But
+first and foremost, this is a personal project.
+
+[CC-BY-NC-ND-4.0]: https://creativecommons.org/licenses/by-nc-nd/4.0
 """
 
 
