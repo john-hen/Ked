@@ -1,4 +1,5 @@
 ﻿# Ked
+
 *Simple text editor for the terminal*
 
 Ked is a single-file text editor that runs in the terminal. Its interface is
