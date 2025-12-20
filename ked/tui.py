@@ -14,6 +14,7 @@ from textual.app       import SystemCommand
 from textual.binding   import Binding
 from textual.reactive  import reactive
 from textual.screen    import Screen
+from textual.events    import Key
 
 from pathlib         import Path
 from collections.abc import Iterable
@@ -49,7 +50,38 @@ class TUI(App[str], inherit_bindings=False):
         )
 
     def on_mount(self):
+        """Event triggered when app is ready to process messages."""
         self.theme = 'flexoki'
+
+    async def on_key(self, event: Key):
+        """Event triggered when the user presses a key."""
+        # Work around issue that Ctrl+Backspace doesn't trigger its action.
+        if event.key == 'backspace' and event.character == '\x08':
+            active_bindings = self.app.screen.active_bindings
+            for (node, binding, enabled, _) in active_bindings.values():
+                if enabled and binding.key == 'ctrl+backspace':
+                    event.prevent_default()
+                    await node.run_action(binding.action)
+
+    def on_editor_encoding_detected(self):
+        """Event triggered when editor detected the text encoding."""
+        editor = self.query_exactly_one('#editor', expect_type=Editor)
+        self.encoding = editor.encoding
+
+    def on_editor_newline_detected(self):
+        """Event triggered when editor detected the line endings."""
+        editor = self.query_exactly_one('#editor', expect_type=Editor)
+        self.newline = editor.newline
+
+    def on_editor_file_loaded(self):
+        """Event triggered when editor loaded a file."""
+        editor = self.query_exactly_one('#editor', expect_type=Editor)
+        self.file = editor.file
+
+    def on_editor_cursor_moved(self):
+        """Event triggered when cursor was moved in editor."""
+        editor = self.query_exactly_one('#editor', expect_type=Editor)
+        self.cursor = editor.cursor_location
 
     def get_key_display(self, binding: Binding) -> str:
         """Formats how key bindings are displayed throughout the app."""
@@ -105,26 +137,6 @@ class TUI(App[str], inherit_bindings=False):
                 key = self.get_key_display(binding)
                 title += f' ({key})'
             yield SystemCommand(title=title, help=help, callback=callback)
-
-    def on_editor_encoding_detected(self):
-        """Event triggered when editor detected the text encoding."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        self.encoding = editor.encoding
-
-    def on_editor_newline_detected(self):
-        """Event triggered when editor detected the line endings."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        self.newline = editor.newline
-
-    def on_editor_file_loaded(self):
-        """Event triggered when editor loaded a file."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        self.file = editor.file
-
-    def on_editor_cursor_moved(self):
-        """Event triggered when cursor was moved in editor."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        self.cursor = editor.cursor_location
 
     def action_help(self) -> None:
         """Shows the Help screen."""

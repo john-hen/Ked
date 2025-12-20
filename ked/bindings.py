@@ -225,16 +225,6 @@ editor = [
         show        = False,
         id          = 'delete_right',
     ),
-    # TODO: Fix this.
-    # Ctrl+Backspace does not work in any terminal I've tested.
-    # See: https://github.com/Textualize/textual/issues/5134
-    # The key binding is usually mapped to Ctrl+W, but I would like to use
-    # that to toggle word wrapping.
-    # Running the Textual key logger with `textual keys`, I see that in the
-    # Windows Terminal, just Backspace is registered as character '\x7f`
-    # whereas Ctrl+Backspace is character '\x08'. Maybe that's something
-    # to pursue. Like by intercepting the key event and triggering the
-    # action that way. T.b.d.
     Binding(
         key         = 'ctrl+backspace',
         action      = 'delete_word_left',
