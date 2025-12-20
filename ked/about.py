@@ -77,10 +77,13 @@ class About(ModalScreen):
     """About screen of the application"""
 
     DEFAULT_CSS = """
+        About {
+            align: right top;
+        }
         #frame {
             border:           round $primary;
             background:       $surface;
-            margin:           2 8;
+            margin:           2 4;
             width:            70;
             min-height:       19;
             min-width:        50;
