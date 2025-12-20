@@ -1,55 +1,55 @@
 # Project meta information
 
 [project]
-name        = 'Ked'
-version     = '0.2.1'
-authors     = [{name = 'John Hennig'}]
-description = 'simple text editor for the terminal'
-keywords    = ['editor', 'terminal']
-readme      = 'ReadMe_PyPI.md'
+name        = "Ked"
+version     = "0.2.1"
+authors     = [{name = "John Hennig"}]
+description = "simple text editor for the terminal"
+keywords    = ["editor", "terminal"]
+readme      = "ReadMe_PyPI.md"
 classifiers = [
-    'Development Status :: 3 - Alpha',
-    'Operating System :: OS Independent',
-    'Topic :: Text Editors',
+    "Development Status :: 3 - Alpha",
+    "Operating System :: OS Independent",
+    "Topic :: Text Editors",
 ]
-license       = 'CC-BY-NC-ND-4.0'
-license-files = ['license.txt']
+license       = "CC-BY-NC-ND-4.0"
+license-files = ["license.txt"]
 
-requires-python = '>= 3.11'
+requires-python = ">= 3.11"
 dependencies = [
-    'Textual[syntax] >= 6',
-    'Rich            >= 14',
-    'Cyclopts        >= 4',
-    'Ruamel-Yaml     >= 0.18',
+    "Textual[syntax] >= 6",
+    "Rich            >= 14",
+    "Cyclopts        >= 4",
+    "Ruamel-Yaml     >= 0.18",
 ]
 [dependency-groups]
 test = [
-    'pyTest     >= 8',
-    'pytest-cov >= 7',
-    'Ruff       >= 0.8',
+    "pyTest     >= 8",
+    "pytest-cov >= 7",
+    "Ruff       >= 0.8",
 ]
 dev = [
-    'Textual-dev',
-    {include-group = 'test'}
+    "Textual-dev",
+    {include-group = "test"}
 ]
 
 [project.scripts]
-ked = 'ked:cli'
+ked = "ked:cli"
 
 [project.urls]
-Source   = 'https://github.com/john-hen/Ked'
-Releases = 'https://github.com/john-hen/Ked/releases'
+Source   = "https://github.com/john-hen/Ked"
+Releases = "https://github.com/john-hen/Ked/releases"
 
 
 # Build backend: UV
 
 [build-system]
-requires      = ['uv_build >= 0.9.8']
-build-backend = 'uv_build'
+requires      = ["uv_build >= 0.9.8"]
+build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-name = 'ked'
-module-root = '.'
+module-name = "ked"
+module-root = "."
 
 
 # Code linter: Ruff
@@ -57,91 +57,91 @@ module-root = '.'
 [tool.ruff]
 line-length    = 79
 indent-width   = 4
-target-version = 'py311'
+target-version = "py311"
 include = [
-    'ked/**/*.py',
-    'tests/**/*.py',
-    'pyproject.toml',
+    "ked/**/*.py",
+    "tests/**/*.py",
+    "pyproject.toml",
 ]
 
 [tool.ruff.format]
 # The project does not actually use the Ruff formatter (only the linter),
 # but these settings would be used if it did.
-quote-style = 'single'
-line-ending = 'lf'
+quote-style = "single"
+line-ending = "lf"
 
 [tool.ruff.lint]
 preview = true
 select = [
-    'F',                  # basic linter rules
-    'E',                  # code style errors
-    'W',                  # code style warnings
-    'B',                  # possible bugs
-    'Q',                  # quotation marks
-    'ARG',                # unused function arguments
-    'C4',                 # correct comprehensions
-    'ERA',                # commented-out code
-    'FA',                 # future annotations
-    'PIE',                # miscellaneous lints
-    'PT',                 # pyTest style
-    'PTH',                # pathlib use mandatory
-    'RSE',                # raised exceptions
-    'RUF',                # ruff-specific rules
-    'SIM',                # simplifiable code
-    'T10',                # debugger calls
-    'UP',                 # upgradable code
-    'RUF100',             # unnecessary `noqa` directives
+    "F",                  # basic linter rules
+    "E",                  # code style errors
+    "W",                  # code style warnings
+    "B",                  # possible bugs
+    "Q",                  # quotation marks
+    "ARG",                # unused function arguments
+    "C4",                 # correct comprehensions
+    "ERA",                # commented-out code
+    "FA",                 # future annotations
+    "PIE",                # miscellaneous lints
+    "PT",                 # pyTest style
+    "PTH",                # pathlib use mandatory
+    "RSE",                # raised exceptions
+    "RUF",                # ruff-specific rules
+    "SIM",                # simplifiable code
+    "T10",                # debugger calls
+    "UP",                 # upgradable code
+    "RUF100",             # unnecessary `noqa` directives
 ]
 ignore = [
-    'E201',               # whitespace after (
-    'E202',               # whitespace before (
-    'E221',               # missing whitespace before operator
-    'E226',               # missing whitespace around operator
-    'E241',               # multiple spaces after comma
-    'E251',               # unexpected spaces around keyword equals
-    'E272',               # multiple spaces before keyword
-    'E731',               # assignment of `lambda` expression
-    'SIM108',             # ternary operator instead of if-else
-    'PT013',              # incorrect pytest import
-    'PTH201',             # never use `Path('.')`
-    'RUF013',             # implicit `Optional` by assigning `None`
+    "E201",               # whitespace after (
+    "E202",               # whitespace before (
+    "E221",               # missing whitespace before operator
+    "E226",               # missing whitespace around operator
+    "E241",               # multiple spaces after comma
+    "E251",               # unexpected spaces around keyword equals
+    "E272",               # multiple spaces before keyword
+    "E731",               # assignment of `lambda` expression
+    "SIM108",             # ternary operator instead of if-else
+    "PT013",              # incorrect pytest import
+    "PTH201",             # never use `Path('.')`
+    "RUF013",             # implicit `Optional` by assigning `None`
 ]
 
 [tool.ruff.lint.per-file-ignores]
-'__init__.py' = [
-    'F401',               # imported but unused
+"__init__.py" = [
+    "F401",               # imported but unused
 ]
 
 [tool.ruff.lint.isort]
 section-order = [
-    'future',
-    'local-folder',
-    'first-party',
-    'third-party',
-    'standard-library',
+    "future",
+    "local-folder",
+    "first-party",
+    "third-party",
+    "standard-library",
 ]
 
 [tool.ruff.lint.flake8-quotes]
-inline-quotes    = 'single'
-multiline-quotes = 'double'
-docstring-quotes = 'double'
+inline-quotes    = "single"
+multiline-quotes = "double"
+docstring-quotes = "double"
 avoid-escape     = true
 
 
 # Test framework: pyTest + Coverage
 
 [tool.pytest.ini_options]
-testpaths            = ['tests/']
-addopts              = ['--verbose', '--durations=0', '--durations-min=5']
-console_output_style = 'count'
+testpaths            = ["tests/"]
+addopts              = ["--verbose", "--durations=0", "--durations-min=5"]
+console_output_style = "count"
 
 [tool.coverage.run]
-source         = ['ked/']
-data_file      = 'build/coverage/.coverage'
+source         = ["ked/"]
+data_file      = "build/coverage/.coverage"
 relative_files = true
 
 [tool.coverage.html]
-directory = 'build/coverage/'
+directory = "build/coverage/"
 
 [tool.coverage.xml]
-output = 'build/coverage/coverage.xml'
+output = "build/coverage/coverage.xml"
