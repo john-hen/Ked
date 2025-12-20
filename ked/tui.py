@@ -122,6 +122,12 @@ class TUI(App[str], inherit_bindings=False):
                 editor.action_trim_whitespace,
             ),
             (
+                'Wrapping',
+                'Toggle soft-wrapping of long lines.',
+                'toggle_wrapping',
+                editor.action_toggle_wrapping,
+            ),
+            (
                 'Theme',
                 'Change the application theme.',
                 'change_theme',
