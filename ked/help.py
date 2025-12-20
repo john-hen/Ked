@@ -11,10 +11,17 @@ from rich.style         import Style
 
 
 prolog = """
-The following key bindings are available:
+The following key bindings have been configured:
 """
 
 epilog = """
+If any of the key bindings don't work, it may be that they are already in use
+by your terminal emulator. The terminal will only forward the combinations it
+isn't reacting to itself to the application that is running inside it.
+
+In a future version, the above key bindings will be configurable. But in the
+meantime, you may consider changing the settings of your terminal to make sure
+its key bindings don't clash with the editor.
 """
 
 
