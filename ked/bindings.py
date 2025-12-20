@@ -8,7 +8,7 @@ about. And we add an "id" for each of them to allow the user to remap the keys.
 As the lists of key bindings are quite long, they are defined here in this
 separate module.
 
-Find a list of accepted `key` values in its Textual's `key.py` module. Find the
+Find a list of accepted `key` values in Textual's `key.py` module. Find the
 default key bindings for the `TextArea` widget in its `widgets/_text_area.py`.
 Find a list of accepted `action` values in the reference documentation of the
 [`TextArea` widget] via the names of the `action_*` methods.
@@ -206,6 +206,22 @@ editor = [
         tooltip     = 'Move cursor one screen page down.',
         show        = False,
         id          = 'cursor_page_down',
+    ),
+    Binding(
+        key         = 'ctrl+home',
+        action      = 'cursor_file_start',
+        description = 'File start',
+        tooltip     = 'Move cursor to start of file.',
+        show        = False,
+        id          = 'cursor_file_end',
+    ),
+    Binding(
+        key         = 'ctrl+end',
+        action      = 'cursor_file_end',
+        description = 'File end',
+        tooltip     = 'Move cursor to end of file.',
+        show        = False,
+        id          = 'cursor_file_start',
     ),
 
     # Text deletion

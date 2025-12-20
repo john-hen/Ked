@@ -165,6 +165,20 @@ class Editor(TextArea, inherit_bindings=False):
         self.log('Toggling soft-wrapping of lines.')
         self.soft_wrap = not self.soft_wrap
 
+    def action_cursor_file_start(self):
+        """Moves cursor to start of file."""
+        self.log('Moving cursor to start of file.')
+        self.move_cursor((0, 0))
+        self.post_message(self.CursorMoved())
+
+    def action_cursor_file_end(self):
+        """Moves cursor to end of file."""
+        self.log('Moving cursor to end of file.')
+        y = self.document.line_count - 1
+        x = len(self.document.get_line(y))
+        self.move_cursor((y, x))
+        self.post_message(self.CursorMoved())
+
     def check_action(self, action: str, _: tuple[object, ...]) -> bool | None:
         """Marks actions as currently available or not."""
         if action == 'save' and self.file and not self.modified:
