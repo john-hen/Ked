@@ -26,3 +26,12 @@ virtual dev environment has been activated. More verbosity can be achieved by
 not suppressing certain message categories in the `textual console` command.
 
 [textual-log]: https://textual.textualize.io/guide/devtools/#textual-log
+
+
+### Releases
+
+To release a new version:
+- Bump version number in `pyproject.toml` or use `uv version --bump`.
+- Add dedicated commit for the version bump.
+- Publish to PyPI via GitHub Action.
+- Create release on GitHub, tag it (like `0.3.0`), add release notes.
