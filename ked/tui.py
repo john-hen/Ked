@@ -37,8 +37,10 @@ class TUI(App[str], inherit_bindings=False):
     cursor: reactive[tuple[int, int]] = reactive((1, 1))
     """The current cursor position."""
 
-    BINDINGS = bindings.application
-    CSS_PATH = 'tui.tcss'
+    TITLE     = meta.name
+    SUB_TITLE = meta.summary
+    BINDINGS  = bindings.application
+    CSS_PATH  = 'tui.tcss'
 
     def compose(self) -> ComposeResult:
         """Composes the application's user interface."""
@@ -184,7 +186,7 @@ class TUI(App[str], inherit_bindings=False):
                 if not file.exists():
                     break
                 counter += 1
-        svg = self.export_screenshot(title=meta.name)
+        svg = self.export_screenshot()
         file.write_text(svg, encoding='UTF-8')
 
     def action_quit(self):
