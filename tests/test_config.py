@@ -8,12 +8,12 @@ from pytest import fixture
 
 @fixture(scope='module', autouse=True)
 def temp_folder(tmp_path_factory):
-    temp_folder       = tmp_path_factory.getbasetemp()
-    config.user_dir   = temp_folder / 'user'
-    config.global_dir = temp_folder / 'global'
-    config.global_dir.mkdir()
-    file = config.global_dir / config.settings_file
-    file.write_text('theme:\n  app: "global_theme"\n', encoding='UTF-8-sig')
+    temp_folder     = tmp_path_factory.getbasetemp()
+    config.user_dir = temp_folder / 'user'
+    config.site_dir = temp_folder / 'site'
+    config.site_dir.mkdir()
+    file = config.site_dir / config.file_name
+    file.write_text('theme:\n  app: "site_theme"\n', encoding='UTF-8-sig')
 
 
 def test_query():
@@ -32,9 +32,9 @@ def test_query():
 
     with raises(KeyError, match='not found'):
         config.query(('theme', 'app'), source='user')
-    assert config.query(('theme', 'app'),    source='global') == 'global_theme'
-    assert config.query(('theme', 'app'),    source='all')    == 'global_theme'
-    assert config.query(('theme', 'syntax'), source='all')    == 'css'
+    assert config.query(('theme', 'app'),    source='site') == 'site_theme'
+    assert config.query(('theme', 'app'),    source='all')  == 'site_theme'
+    assert config.query(('theme', 'syntax'), source='all')  == 'css'
 
 
 def test_store():
@@ -45,8 +45,8 @@ def test_store():
     config.store(('theme', 'app'), 'user_theme', target='user')
 
     assert config.user_dir.exists()
-    assert (config.user_dir/config.settings_file).exists()
+    assert (config.user_dir/config.file_name).exists()
     assert config.query(('theme', 'app'), source='user') == 'user_theme'
 
-    config.store(('theme', 'app'), 'new_theme', target='global')
-    assert config.query(('theme', 'app'), source='global') == 'new_theme'
+    config.store(('theme', 'app'), 'new_theme', target='site')
+    assert config.query(('theme', 'app'), source='site') == 'new_theme'

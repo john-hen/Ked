@@ -1,4 +1,4 @@
-﻿"""Persistent storage of configuration"""
+﻿"""Persistent storage of configuration settings"""
 
 from . import meta
 
@@ -20,30 +20,44 @@ cli = cyclopts.App(
     help_epilogue = '',
 )
 
-user_dir      = platformdirs.user_config_path() / meta.name
-global_dir    = platformdirs.site_config_path() / meta.name
-settings_file = 'settings.yaml'
+user_dir  = platformdirs.user_config_path() / meta.name
+site_dir  = platformdirs.site_config_path() / meta.name
+file_name = 'settings.yaml'
 
 Setting:  TypeAlias = tuple[str, ...]
 Value:    TypeAlias = str | float | int | bool
 Settings: TypeAlias = dict[str, Value | 'Settings']
 
 
-@cli.command()
-def dir():
-    """Show the configuration directory."""
-    print(user_dir)
+@cli.command(sort_key=1)
+def folders():
+    """Show the configuration folders."""
+    labels  = ('user config folder', 'site config folder')
+    folders = (user_dir, site_dir)
+    for (label, folder) in zip(labels, folders, strict=True):
+        if folder.exists():
+            cli.console.print(f'{label}: [bold]{folder}[/]')
+        else:
+            cli.console.print(f'[dim]{label}: {folder}')
 
 
-@cli.command()
-def file():
-    """Show the configuration file."""
-    print(user_dir/settings_file)
+@cli.command(sort_key=2)
+def files():
+    """Show the configuration files."""
+    here    = Path(__file__).parent
+    labels  = ('user config file', 'site config file', 'default config')
+    files   = (user_dir/file_name, site_dir/file_name, here/file_name)
+    padding = max(len(label) for label in labels) + 1
+    for (label, file) in zip(labels, files, strict=True):
+        if file.exists():
+            cli.console.print(f'{label+":":{padding}} [bold]{file}[/]')
+        else:
+            cli.console.print(f'[dim]{label+":":{padding}} {file}')
 
 
 def query(
     setting: Setting,
-    source:  Literal['user', 'global', 'default', 'all'] = 'all',
+    source:  Literal['user', 'site', 'default', 'all'] = 'all',
 ) -> Value:
     """Queries the value of a `setting` from configuration `source` file(s)."""
     if not isinstance(setting, tuple):
@@ -54,14 +68,14 @@ def query(
     match source:
         case 'user':
             folders = (user_dir,)
-        case 'global':
-            folders = (global_dir,)
+        case 'site':
+            folders = (site_dir,)
         case 'default':
             folders = (here,)
         case 'all':
-            folders = (user_dir, global_dir, here)
+            folders = (user_dir, site_dir, here)
     for folder in folders:
-        file = folder/settings_file
+        file = folder/file_name
         if not file.exists():
             continue
         settings = yaml.safe_load(file.read_text(encoding='UTF-8-sig'))
@@ -76,16 +90,16 @@ def query(
 def store(
     setting: Setting,
     value:   Value,
-    target:  Literal['user', 'global'] = 'user',
+    target:  Literal['user', 'site'] = 'user',
 ):
     """Stores the `value` of a `setting` in `target` configuration file."""
     match target:
         case 'user':
             folder = user_dir
-        case 'global':
-            folder = global_dir
+        case 'site':
+            folder = site_dir
 
-    file = folder/settings_file
+    file = folder/file_name
     if not file.exists():
         file.parent.mkdir(parents=True, exist_ok=True)
         file.write_text('', encoding='UTF-8-sig')
