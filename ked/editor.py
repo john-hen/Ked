@@ -10,6 +10,7 @@ from textual.message           import Message
 from textual.events            import Key
 from textual.events            import MouseDown
 
+import os
 import tokenize
 from pathlib import Path
 
@@ -90,8 +91,14 @@ class Editor(TextArea, inherit_bindings=False):
             self.load_text(stream.read())
             newlines = stream.newlines
 
-        if not isinstance(newlines, str):
+        if newlines is None:
+            newlines = os.linesep
+        elif isinstance(newlines, str):
+            pass
+        elif isinstance(newlines, tuple):
             self.app.exit('File contains mixed line endings.', return_code=11)
+        else:
+            raise TypeError(f'Unexpected type for "newlines": {newlines}')
         self.log(f'Detected line endings "{newlines!r}".')
         self.newline = newlines
         self.post_message(self.NewlineDetected())

@@ -14,9 +14,10 @@ from typing  import Literal
 
 settings = {}
 cli = cyclopts.App(
-    name     = 'config',
-    help     = 'Manage the configuration.',
-    sort_key = 2,
+    name          = 'config',
+    sort_key      = 3,
+    help          = 'Manage the configuration.',
+    help_epilogue = '',
 )
 
 user_dir      = platformdirs.user_config_path() / meta.name
