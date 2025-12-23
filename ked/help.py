@@ -37,7 +37,7 @@ class Help(ModalScreen):
             background:       $surface;
             margin:           2 4;
             width:            70;
-            min-height:       19;
+            min-height:       15;
             min-width:        50;
             scrollbar-gutter: stable;
         }
