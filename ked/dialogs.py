@@ -21,7 +21,7 @@ class UnsavedFile(ModalScreen[str]):
         }
         #box {
             width:       auto;
-            border:      round $primary;
+            border:      round $border;
             background:  $background;
         }
         #question {

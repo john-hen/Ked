@@ -46,7 +46,7 @@ class Editor(TextArea, inherit_bindings=False):
 
     DEFAULT_CSS = """
         Editor {
-            border:  round $primary;
+            border:  round $border;
             padding: 0;
         }
     """

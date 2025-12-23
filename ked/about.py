@@ -81,7 +81,7 @@ class About(ModalScreen):
             align: right top;
         }
         #frame {
-            border:           round $primary;
+            border:           round $border;
             background:       $surface;
             margin:           2 4;
             width:            70;
