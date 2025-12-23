@@ -10,6 +10,7 @@ import ruamel.yaml
 from pathlib import Path
 from typing  import TypeAlias
 from typing  import Literal
+from typing  import Union
 
 
 settings = {}
@@ -26,7 +27,7 @@ file_name = 'settings.yaml'
 
 Setting:  TypeAlias = tuple[str, ...]
 Value:    TypeAlias = str | float | int | bool
-Settings: TypeAlias = dict[str, Value | 'Settings']
+Settings: TypeAlias = dict[str, Union[Value, 'Settings']]
 
 
 @cli.command(sort_key=1)
