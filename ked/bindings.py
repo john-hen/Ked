@@ -205,7 +205,7 @@ editor = [
         description = 'File start',
         tooltip     = 'Move cursor to start of file.',
         show        = False,
-        id          = 'cursor_file_end',
+        id          = 'cursor_file_start',
     ),
     Binding(
         key         = 'ctrl+end',
@@ -213,7 +213,7 @@ editor = [
         description = 'File end',
         tooltip     = 'Move cursor to end of file.',
         show        = False,
-        id          = 'cursor_file_start',
+        id          = 'cursor_file_end',
     ),
 
     # Text deletion
