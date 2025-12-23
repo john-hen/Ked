@@ -20,6 +20,7 @@ dependencies = [
     "Textual[syntax] >= 6",
     "Rich            >= 14",
     "Cyclopts        >= 4",
+    "pyYaml          >= 6",
     "Ruamel-Yaml     >= 0.18",
 ]
 [dependency-groups]

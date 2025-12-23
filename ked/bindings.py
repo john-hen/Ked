@@ -30,11 +30,11 @@ application = [
     ),
     Binding(
         key         = 'f1',
-        action      = 'help',
+        action      = 'show_help',
         description = 'Help',
         tooltip     = 'Show help screen.',
         priority    = True,
-        id          = 'help',
+        id          = 'show_help',
     ),
     Binding(
         key         = 'ctrl+p',
@@ -43,14 +43,6 @@ application = [
         tooltip     = 'Show the command palette.',
         priority    = True,
         id          = 'command_palette',
-    ),
-    Binding(
-        key         = 'f5',
-        action      = 'change_theme',
-        description = 'Theme',
-        tooltip     = 'Change the application theme.',
-        show        = False,
-        id          = 'change_theme',
     ),
 ]
 

@@ -57,7 +57,6 @@ def default(
 @cli.command(sort_key=1)
 def edit(file: Path) -> int:
     """Edit a given file."""
-    config.init()
     tui = TUI()
     tui.file = file
     error_message = tui.run()

@@ -1,12 +1,14 @@
 ﻿"""Text-based user interface of the application"""
 
 from .          import meta
+from .          import config
 from .          import bindings
 from .          import dialogs
 from .editor    import Editor
 from .statusbar import Statusbar
 from .help      import Help
 from .about     import About
+from .settings  import Settings
 
 from textual.app       import App
 from textual.app       import ComposeResult
@@ -49,9 +51,14 @@ class TUI(App[str], inherit_bindings=False):
             cursor   = TUI.cursor,
         )
 
+    @property
+    def editor(self) -> Editor:
+        """Convenience property that returns the (single) editor widget."""
+        return self.app.query_exactly_one('#editor', expect_type=Editor)
+
     def on_mount(self):
         """Event triggered when app is ready to process messages."""
-        self.theme = 'flexoki'
+        self.theme = config.query(('theme', 'app'))
 
     async def on_key(self, event: Key):
         """Event triggered when the user presses a key."""
@@ -65,23 +72,19 @@ class TUI(App[str], inherit_bindings=False):
 
     def on_editor_encoding_detected(self):
         """Event triggered when editor detected the text encoding."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        self.encoding = editor.encoding
+        self.encoding = self.editor.encoding
 
     def on_editor_newline_detected(self):
         """Event triggered when editor detected the line endings."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        self.newline = editor.newline
+        self.newline = self.editor.newline
 
     def on_editor_file_loaded(self):
         """Event triggered when editor loaded a file."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        self.file = editor.file
+        self.file = self.editor.file
 
     def on_editor_cursor_moved(self):
         """Event triggered when cursor was moved in editor."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        self.cursor = editor.cursor_location
+        self.cursor = self.editor.cursor_location
 
     def get_key_display(self, binding: Binding) -> str:
         """Formats how key bindings are displayed throughout the app."""
@@ -94,50 +97,49 @@ class TUI(App[str], inherit_bindings=False):
         return display_text
 
     def get_system_commands(self, screen: Screen) -> Iterable[SystemCommand]:
-        """Populates command palette."""
-        editor = self.query_exactly_one('#editor')
+        """Populates the command palette."""
         commands = (
             (
                 'About',
                 'Show information about the application.',
                 'about',
-                self.action_about,
+                self.action_show_about,
             ),
             (
                 'Help',
                 'Show help screen with key bindings.',
                 'help',
-                self.action_help,
+                self.action_show_help,
             ),
             (
-                'Quit',
-                'Quit the application.',
-                'quit',
-                self.action_quit,
+                'Settings',
+                'Open configuration settings.',
+                'settings',
+                self.action_open_settings,
             ),
             (
                 'Trim',
                 'Trim trailing white-space.',
                 'trim_whitespace',
-                editor.action_trim_whitespace,
+                self.editor.action_trim_whitespace,
             ),
             (
-                'Wrapping',
+                'Wrap',
                 'Toggle soft-wrapping of long lines.',
                 'toggle_wrapping',
-                editor.action_toggle_wrapping,
-            ),
-            (
-                'Theme',
-                'Change the application theme.',
-                'change_theme',
-                self.action_change_theme,
+                self.editor.action_toggle_wrapping,
             ),
             (
                 'Screenshot',
                 'Save SVG image of screen in current folder.',
                 'screenshot',
                 lambda: self.set_timer(0.1, self.action_screenshot),
+            ),
+            (
+                'Quit',
+                'Quit the application.',
+                'quit',
+                self.action_quit,
             ),
         )
         actions_to_bindings = {
@@ -151,24 +153,27 @@ class TUI(App[str], inherit_bindings=False):
                 title += f' ({key})'
             yield SystemCommand(title=title, help=help, callback=callback)
 
-    def action_help(self) -> None:
+    def action_show_help(self) -> None:
         """Shows the Help screen."""
-        self.app.push_screen(Help())
+        self.app.push_screen(Help(id='help'))
 
-    def action_about(self) -> None:
+    def action_show_about(self) -> None:
         """Shows the About screen."""
-        self.app.push_screen(About())
+        self.app.push_screen(About(id='about'))
 
-    def action_screenshot(self,  filename: str = None, path: str = None):
+    def action_open_settings(self) -> None:
+        """Opens the Settings dialog."""
+        self.app.push_screen(Settings(id='settings'))
+
+    def action_screenshot(self, filename: str = None, path: str = None):
         """Saves a screenshot of the app in the current folder."""
         folder = Path(path) if path else Path('.')
         if filename:
             file = folder / filename
         else:
-            editor = self.query_exactly_one('#editor', expect_type=Editor)
             stem = f'screenshot_{meta.name}'
-            if editor.file:
-                stem += f'_{editor.file.name}'
+            if self.editor.file:
+                stem += f'_{self.editor.file.name}'
             folder = Path('.')
             counter = 1
             while True:
@@ -184,14 +189,13 @@ class TUI(App[str], inherit_bindings=False):
 
     def action_quit(self):
         """Called when the user wants to quit the application."""
-        editor = self.query_exactly_one('#editor', expect_type=Editor)
-        if not editor.modified:
+        if not self.editor.modified:
             self.exit()
 
         def follow_up(button: str):
             match button:
                 case 'save':
-                    editor.action_save()
+                    self.editor.action_save()
                     self.exit()
                 case 'quit':
                     self.exit()

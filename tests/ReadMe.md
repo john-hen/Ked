@@ -1,11 +1,11 @@
-﻿## Test suite
+﻿# Test suite
 
-This folder will contain the automated test suite, the code for which has yet
-to be written. The `files` folder contains some test files currently being
-used when testing manually.
+This folder contains the automated test suite, most of which has yet to be
+implemented. The `files` folder contains some text files currently used for
+manual tests.
 
 
-### Debugging
+## Debugging
 
 Debugging a TUI application can be tricky as the user interface blocks the
 terminal. But it is often sufficient to look at log output. As explained [in
@@ -28,7 +28,7 @@ not suppressing certain message categories in the `textual console` command.
 [textual-log]: https://textual.textualize.io/guide/devtools/#textual-log
 
 
-### Releases
+## Releases
 
 To release a new version:
 - Bump version number in `pyproject.toml` or use `uv version --bump`.

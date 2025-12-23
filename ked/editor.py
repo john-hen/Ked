@@ -1,5 +1,6 @@
 ﻿"""Editor widget central to the application"""
 
+from . import config
 from . import bindings
 
 from textual.widgets           import TextArea
@@ -59,6 +60,10 @@ class Editor(TextArea, inherit_bindings=False):
             max_checkpoints   = 1000,
             theme             = 'css',
         )
+
+    def on_mount(self):
+        """Event triggered when widget is ready to process messages."""
+        self.theme = config.query(('theme', 'syntax'))
 
     def watch_file(self, file: Path | None):
         """Loads file whenever the reactive `file` attribute changes."""

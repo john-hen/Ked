@@ -1,7 +1,7 @@
 /* Custom style sheet for the application */
 
 /*
-Find the list of predefined base colors here:
+Find the list of predefined theme colors here:
 https://textual.textualize.io/guide/design/#base-colors
 */
 
@@ -24,5 +24,46 @@ https://textual.textualize.io/guide/design/#base-colors
         }
         #file-name {
         }
+    }
+}
+
+#settings {
+    #frame {
+    }
+    #panels {
+    }
+    .grid-label-value {
+    }
+    .grid-label-value Label {
+    }
+    .grid-label-value Select {
+    }
+    .grid-label-value Select SelectOverlay {
+    }
+    .grid-label-value Select SelectCurrent {
+    }
+    .grid-label-value Select:focus SelectCurrent {
+    }
+    #buttons {
+    }
+}
+
+#help {
+    #frame {
+    }
+    #prolog {
+    }
+    #keys {
+    }
+    #epilog {
+    }
+}
+
+#about {
+    #frame {
+    }
+    #logo {
+    }
+    #text {
     }
 }
