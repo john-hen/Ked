@@ -61,7 +61,7 @@ class TUI(App[str], inherit_bindings=False):
     def on_mount(self):
         """Event triggered when app is ready to process messages."""
         self.theme = config.query(('theme', 'app'))
-        bindings = (
+        binding_ids = (
             # Application
             'quit_app', 'show_help', 'command_palette',
             # File operations
@@ -87,8 +87,8 @@ class TUI(App[str], inherit_bindings=False):
             'select_all',
         )
         keymap = {
-            binding: config.query(('keys', binding))
-            for binding in bindings
+            binding: bindings.normalize_key(config.query(('keys', binding)))
+            for binding in binding_ids
         }
         self.set_keymap(keymap)
 
@@ -120,13 +120,7 @@ class TUI(App[str], inherit_bindings=False):
 
     def get_key_display(self, binding: Binding) -> str:
         """Formats how key bindings are displayed throughout the app."""
-        display_text = (
-            super().get_key_display(binding)
-            .title()
-            .replace('Pgup', 'PgUp')
-            .replace('Pgdn', 'PgDn')
-        )
-        return display_text
+        return bindings.format_key(super().get_key_display(binding))
 
     def get_system_commands(self, screen: Screen) -> Iterable[SystemCommand]:
         """Populates the command palette."""

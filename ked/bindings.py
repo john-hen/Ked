@@ -25,6 +25,25 @@ Find a list of accepted `action` values in the reference documentation of the
 from textual.binding import Binding
 
 
+def normalize_key(key: str) -> str:
+    """Maps common key designations to the identifiers Textual recognizes."""
+    return (
+        key.lower()
+        .replace('^', 'ctrl+')
+        .replace('pgup', 'pageup')
+        .replace('pgdn', 'pagedown')
+    )
+
+
+def format_key(key: str) -> str:
+    """Formats a key identifier for display anywhere in the app."""
+    return (
+        key.title()
+        .replace('Pgup', 'PgUp')
+        .replace('Pgdn', 'PgDn')
+    )
+
+
 application = [
     Binding(
         key         = '<ignore>',
