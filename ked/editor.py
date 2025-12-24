@@ -52,7 +52,6 @@ class Editor(TextArea, inherit_bindings=False):
     """
 
     def __init__(self, id: str = 'editor'):
-        self.log('Initializing editor widget.')
         super().__init__(
             id                = id,
             soft_wrap         = False,
@@ -70,20 +69,15 @@ class Editor(TextArea, inherit_bindings=False):
         """Loads file whenever the reactive `file` attribute changes."""
 
         if file is None:
-            self.log('Editor widget waiting for a file to load.')
             return
-        self.log(f'Loading file "{file}" into editor widget.')
 
         language = infer_language(file)
-        self.log(f'Inferred language is "{language}".')
         if language in self.available_languages:
             self.language = language
         else:
-            self.log('Inferred language not available.')
             self.language = None
 
         encoding = detect_encoding(file)
-        self.log(f'Detected encoding "{encoding}".')
         self.encoding = encoding
         self.post_message(self.EncodingDetected())
 
@@ -99,7 +93,6 @@ class Editor(TextArea, inherit_bindings=False):
             self.app.exit('File contains mixed line endings.', return_code=11)
         else:
             raise TypeError(f'Unexpected type for "newlines": {newlines}')
-        self.log(f'Detected line endings "{newlines!r}".')
         self.newline = newlines
         self.post_message(self.NewlineDetected())
 
@@ -124,7 +117,6 @@ class Editor(TextArea, inherit_bindings=False):
         """Saves the file to disk."""
         if not self.file:
             return
-        self.log(f'Saving file "{self.file}" with encoding {self.encoding}.')
         self.file.write_text(
             self.text, encoding=self.encoding, newline=self.newline
         )
@@ -133,7 +125,6 @@ class Editor(TextArea, inherit_bindings=False):
 
     def action_trim_whitespace(self):
         """Trims trailing white-space characters."""
-        self.log('Trimming trailing white-space characters.')
         changed = False
 
         trims = 0
@@ -174,18 +165,15 @@ class Editor(TextArea, inherit_bindings=False):
 
     def action_toggle_wrapping(self):
         """Toggles the soft-wrapping of lines."""
-        self.log('Toggling soft-wrapping of lines.')
         self.soft_wrap = not self.soft_wrap
 
     def action_cursor_file_start(self):
         """Moves cursor to start of file."""
-        self.log('Moving cursor to start of file.')
         self.move_cursor((0, 0))
         self.post_message(self.CursorMoved())
 
     def action_cursor_file_end(self):
         """Moves cursor to end of file."""
-        self.log('Moving cursor to end of file.')
         y = self.document.line_count - 1
         x = len(self.document.get_line(y))
         self.move_cursor((y, x))

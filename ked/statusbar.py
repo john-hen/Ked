@@ -54,8 +54,6 @@ class Statusbar(Footer):
     def compose(self) -> ComposeResult:
         """Composes the widget."""
 
-        self.log('Composing status bar.')
-
         with Horizontal(id='key-bindings'):
             active_bindings = self.screen.active_bindings
             app_bindings    = {}

@@ -44,7 +44,6 @@ class TUI(App[str], inherit_bindings=False):
 
     def compose(self) -> ComposeResult:
         """Composes the application's user interface."""
-        self.log('Composing application interface.')
         yield Editor(id='editor').data_bind(file=TUI.file)
         yield Statusbar(id='statusbar').data_bind(
             file     = TUI.file,
@@ -91,7 +90,6 @@ class TUI(App[str], inherit_bindings=False):
             binding: bindings.normalize_key(config.query(('keys', binding)))
             for binding in binding_ids
         }
-        self.log(keymap)
         self.set_keymap(keymap)
 
     async def on_key(self, event: Key):
