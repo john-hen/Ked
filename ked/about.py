@@ -1,4 +1,4 @@
-"""About screen of the application"""
+"""About panel of the application"""
 
 from .meta import version
 
@@ -74,7 +74,7 @@ first and foremost, this is a personal project.
 
 
 class About(ModalScreen):
-    """About screen of the application"""
+    """About panel of the application"""
 
     DEFAULT_CSS = """
         About {

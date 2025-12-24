@@ -57,7 +57,7 @@ application = [
         key         = '<ignore>',
         action      = 'show_help',
         description = 'Help',
-        tooltip     = 'Show help screen.',
+        tooltip     = 'Show Help panel.',
         priority    = True,
         id          = 'show_help',
     ),
@@ -69,6 +69,23 @@ application = [
         priority    = True,
         id          = 'command_palette',
     ),
+    Binding(
+        key         = '<ignore>',
+        action      = 'open_settings',
+        description = 'Settings',
+        tooltip     = 'Open Settings dialog.',
+        show        = False,
+        id          = 'open_settings',
+    ),
+    Binding(
+        key         = '<ignore>',
+        action      = 'show_about',
+        description = 'About',
+        tooltip     = 'Show About panel.',
+        show        = False,
+        id          = 'show_about',
+    ),
+
 ]
 
 

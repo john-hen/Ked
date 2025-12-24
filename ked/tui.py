@@ -64,6 +64,7 @@ class TUI(App[str], inherit_bindings=False):
         binding_ids = (
             # Application
             'quit_app', 'show_help', 'command_palette',
+            'open_settings', 'show_about',
             # File operations
             'save', 'trim_whitespace', 'toggle_wrapping',
             # Clipboard interaction
@@ -90,6 +91,7 @@ class TUI(App[str], inherit_bindings=False):
             binding: bindings.normalize_key(config.query(('keys', binding)))
             for binding in binding_ids
         }
+        self.log(keymap)
         self.set_keymap(keymap)
 
     async def on_key(self, event: Key):
@@ -133,7 +135,7 @@ class TUI(App[str], inherit_bindings=False):
             ),
             (
                 'Help',
-                'Show help screen with key bindings.',
+                'Show help panel with key bindings.',
                 'help',
                 self.action_show_help,
             ),
@@ -180,11 +182,11 @@ class TUI(App[str], inherit_bindings=False):
             yield SystemCommand(title=title, help=help, callback=callback)
 
     def action_show_help(self) -> None:
-        """Shows the Help screen."""
+        """Shows the Help panel."""
         self.app.push_screen(Help(id='help'))
 
     def action_show_about(self) -> None:
-        """Shows the About screen."""
+        """Shows the About panel."""
         self.app.push_screen(About(id='about'))
 
     def action_open_settings(self) -> None:

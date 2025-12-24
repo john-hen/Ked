@@ -1,4 +1,4 @@
-"""Help screen showing key bindings"""
+"""Help panel showing key bindings"""
 
 from textual.screen     import ModalScreen
 from textual.containers import VerticalScroll
@@ -26,7 +26,7 @@ its key bindings don't clash with the editor.
 
 
 class Help(ModalScreen):
-    """Help screen showing key bindings"""
+    """Help panel showing key bindings"""
 
     DEFAULT_CSS = """
         Help {
