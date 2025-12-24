@@ -1,5 +1,4 @@
 ﻿"""Persistent storage of configuration settings"""
-
 from . import meta
 
 import cyclopts
@@ -7,27 +6,32 @@ import platformdirs
 import yaml
 import ruamel.yaml
 
-from pathlib import Path
-from typing  import TypeAlias
-from typing  import Literal
-from typing  import Union
+from functools import cache
+from pathlib   import Path
+from typing    import TypeAlias
+from typing    import Literal
+from typing    import Union
 
 
-settings = {}
+user_dir: Path = platformdirs.user_config_path() / meta.name
+"""folder with the per-user configuration"""
+
+site_dir  = platformdirs.site_config_path() / meta.name
+"""folder with the machine-wide configuration"""
+
+file_name = 'settings.yaml'
+"""name of file that stores the settings in a configuration folder"""
+
+Setting:  TypeAlias = tuple[str, ...]
+Value:    TypeAlias = str | float | int | bool
+Settings: TypeAlias = dict[str, Union[Value, 'Settings']]
+
 cli = cyclopts.App(
     name          = 'config',
     sort_key      = 3,
     help          = 'Manage the configuration.',
     help_epilogue = '',
 )
-
-user_dir  = platformdirs.user_config_path() / meta.name
-site_dir  = platformdirs.site_config_path() / meta.name
-file_name = 'settings.yaml'
-
-Setting:  TypeAlias = tuple[str, ...]
-Value:    TypeAlias = str | float | int | bool
-Settings: TypeAlias = dict[str, Union[Value, 'Settings']]
 
 
 @cli.command(sort_key=1)
@@ -65,22 +69,13 @@ def query(
         raise TypeError('Argument `setting` must be a tuple of strings.')
     if setting == ():
         raise ValueError('Argument `setting` cannot be an empty tuple.')
-    here  = Path(__file__).parent
     match source:
-        case 'user':
-            folders = (user_dir,)
-        case 'site':
-            folders = (site_dir,)
-        case 'default':
-            folders = (here,)
+        case 'user' | 'site' | 'default':
+            sources = (source,)
         case 'all':
-            folders = (user_dir, site_dir, here)
-    for folder in folders:
-        file = folder/file_name
-        if not file.exists():
-            continue
-        settings = yaml.safe_load(file.read_text(encoding='UTF-8-sig'))
-        value    = query_value(setting, settings)
+            sources = ('user', 'site', 'default')
+    for source in sources:
+        value = query_value(setting, load_file(source))
         if value is not None:
             break
     else:
@@ -115,6 +110,32 @@ def store(
         settings = {}
     store_value(setting, value, settings)
     parser.dump(settings, file)
+    load_file.cache_clear()
+
+
+@cache
+def load_file(source: Literal['user', 'site', 'default']) -> Settings:
+    """
+    Loads settings from requested configuration `source`.
+
+    This function is cached, i.e. the file corresponding to the given source
+    will only be read from disk once. If the file ever changes, call
+    `load_file.clear_cache()` to invalidate the cache.
+    """
+    match source:
+        case 'user':
+            file = user_dir / file_name
+        case 'site':
+            file = site_dir / file_name
+        case 'default':
+            here = Path(__file__).parent
+            file = here / file_name
+    if not file.exists():
+        return {}
+    settings = yaml.safe_load(file.read_text(encoding='UTF-8-sig'))
+    if settings is None:
+        return {}
+    return settings or {}
 
 
 def query_value(setting: Setting, settings: Settings) -> Value | None:

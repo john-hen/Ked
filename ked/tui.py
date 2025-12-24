@@ -61,6 +61,36 @@ class TUI(App[str], inherit_bindings=False):
     def on_mount(self):
         """Event triggered when app is ready to process messages."""
         self.theme = config.query(('theme', 'app'))
+        bindings = (
+            # Application
+            'quit_app', 'show_help', 'command_palette',
+            # File operations
+            'save', 'trim_whitespace', 'toggle_wrapping',
+            # Clipboard interaction
+            'cut', 'copy', 'paste',
+            # Edit history
+            'undo', 'redo',
+            # Cursor movement
+            'cursor_up', 'cursor_down', 'cursor_left', 'cursor_right',
+            'cursor_word_left', 'cursor_word_right',
+            'cursor_line_start', 'cursor_line_end',
+            'cursor_page_up', 'cursor_page_down',
+            'cursor_file_start', 'cursor_file_end',
+            # Text deletion
+            'delete_left', 'delete_right',
+            'delete_word_left', 'delete_word_right',
+            # Selections
+            'select_left', 'select_right',
+            'select_word_left', 'select_word_right',
+            'select_line_start', 'select_line_end',
+            'select_line_up', 'select_line_down',
+            'select_all',
+        )
+        keymap = {
+            binding: config.query(('keys', binding))
+            for binding in bindings
+        }
+        self.set_keymap(keymap)
 
     async def on_key(self, event: Key):
         """Event triggered when the user presses a key."""
