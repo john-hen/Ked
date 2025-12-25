@@ -50,7 +50,6 @@ application = [
         action      = 'quit',
         description = 'Quit',
         tooltip     = 'Quit app and return to command prompt.',
-        priority    = True,
         id          = 'quit_app',
     ),
     Binding(
@@ -58,7 +57,6 @@ application = [
         action      = 'show_help',
         description = 'Help',
         tooltip     = 'Show Help panel.',
-        priority    = True,
         id          = 'show_help',
     ),
     Binding(
@@ -66,7 +64,6 @@ application = [
         action      = 'command_palette',
         description = 'Commands',
         tooltip     = 'Show the command palette.',
-        priority    = True,
         id          = 'command_palette',
     ),
     Binding(
@@ -85,7 +82,6 @@ application = [
         show        = False,
         id          = 'show_about',
     ),
-
 ]
 
 
