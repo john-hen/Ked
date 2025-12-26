@@ -64,6 +64,9 @@ def edit(file: Path) -> int:
         error(f'File "{file}" does not exist.')
         print('To create a file and then edit it, use the "create" command.')
         return 1
+    if file.is_dir():
+        error(f'"{file}" is a directory.')
+        return 2
     return start(file)
 
 
@@ -73,7 +76,7 @@ def create(file: Path) -> int:
     if file.exists():
         error(f'File "{file}" already exist.')
         print('Use the "edit" (or no) command to open it.')
-        return 2
+        return 3
     file.touch()
     return start(file)
 
