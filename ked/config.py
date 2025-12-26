@@ -4,11 +4,11 @@ from . import meta
 import cyclopts
 import platformdirs
 import yaml
-import ruamel.yaml
 
 from functools import cache
 from pathlib   import Path
 from typing    import TypeAlias
+from types     import NoneType
 from typing    import Literal
 from typing    import Union
 
@@ -75,7 +75,7 @@ def query(
         case 'all':
             sources = ('user', 'site', 'default')
     for source in sources:
-        value = query_value(setting, load_file(source))
+        value = query_value(setting, load(source))
         if value is not None:
             break
     else:
@@ -100,21 +100,14 @@ def store(
         file.parent.mkdir(parents=True, exist_ok=True)
         file.write_text('', encoding='UTF-8-sig')
 
-    # Use Ruamel's round-trip parser in order to preserve comments the user may
-    # have added in the configuration file.
-    parser = ruamel.yaml.YAML(typ='rt', pure=True)
-    settings = parser.load(file)
-    if not isinstance(settings, dict):
-        # Ruamel's parser may return a string with the content of the file, for
-        # example if it contains nothing but comments.
-        settings = {}
+    settings = load(target)
     store_value(setting, value, settings)
-    parser.dump(settings, file)
-    load_file.cache_clear()
+    load.cache_clear()
+    save(settings, target)
 
 
 @cache
-def load_file(source: Literal['user', 'site', 'default']) -> Settings:
+def load(source: Literal['user', 'site', 'default']) -> Settings:
     """
     Loads settings from requested configuration `source`.
 
@@ -133,9 +126,25 @@ def load_file(source: Literal['user', 'site', 'default']) -> Settings:
     if not file.exists():
         return {}
     settings = yaml.safe_load(file.read_text(encoding='UTF-8-sig'))
-    if settings is None:
+    if isinstance(settings, (NoneType, str)):
         return {}
-    return settings or {}
+    return settings
+
+
+def save(settings: Settings, target: Literal['user', 'site', 'default']):
+    """Saves settings in `target` configuration file."""
+    match target:
+        case 'user':
+            file = user_dir / file_name
+        case 'site':
+            file = site_dir / file_name
+        case 'default':
+            here = Path(__file__).parent
+            file = here / file_name
+    file.write_text(
+        yaml.dump(settings, indent=4, allow_unicode=True),
+        encoding='UTF-8-sig',
+    )
 
 
 def query_value(setting: Setting, settings: Settings) -> Value | None:
