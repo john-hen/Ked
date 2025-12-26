@@ -40,7 +40,7 @@ class TUI(App[str], inherit_bindings=False):
     TITLE     = meta.name
     SUB_TITLE = meta.summary
     BINDINGS  = bindings.application
-    CSS_PATH  = 'tui.tcss'
+    CSS_PATH  = 'styles.tcss'
 
     def compose(self) -> ComposeResult:
         """Composes the application's user interface."""
