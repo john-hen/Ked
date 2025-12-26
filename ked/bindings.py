@@ -383,20 +383,16 @@ vertical_buttons = [
 ]
 
 
-def normalize_key(key: str) -> str:
-    """Maps common key designations to the identifiers Textual recognizes."""
-    return (
-        key.lower()
-        .replace('^', 'ctrl+')
-        .replace('pgup', 'pageup')
-        .replace('pgdn', 'pagedown')
-    )
-
-
-def format_key(key: str) -> str:
-    """Formats a key identifier for display anywhere in the app."""
-    return (
-        key.title()
-        .replace('Pgup', 'PgUp')
-        .replace('Pgdn', 'PgDn')
-    )
+def key_display(key: str) -> str:
+    """Formats a Textual key designation for (nicer) display in the app."""
+    rename = {
+        'escape':   'Esc',
+        'delete':   'Del',
+        'pageup':   'PgUp',
+        'pagedown': 'PgDn',
+    }
+    parts = [rename.get(part, part.title()) for part in key.split('+')]
+    if len(parts) == 2 and parts[0] == 'Ctrl':
+        parts = (f'^{parts[1]}',)
+    display = '+'.join(parts)
+    return display

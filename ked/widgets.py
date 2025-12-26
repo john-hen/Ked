@@ -1,9 +1,8 @@
 """Custom widgets of this application"""
 
-from . import bindings
-
 from textual.widgets  import Label
 from textual.reactive import reactive
+from textual.binding  import Binding
 from textual.message  import Message
 from textual.events   import Key
 from textual.events   import MouseDown
@@ -51,8 +50,10 @@ class KeyInput(Label, can_focus=True):
             self.tooltip = 'Press key or key combination. Press Del to unset.'
             return 'Press key…'
         else:
-            self.tooltip = 'Click to change.'
-            return self.key
+            self.tooltip  = 'Click to change.'
+            dummy_binding = Binding(self.key, '', '')
+            key_display   = self.app.get_key_display(dummy_binding)
+            return key_display
 
     async def on_key(self, event: Key) -> None:
         """Event triggered when user presses a key."""
@@ -77,7 +78,7 @@ class KeyInput(Label, can_focus=True):
                 case _:
                     # Assign new key.
                     old_key  = self.key
-                    self.key = bindings.format_key(event.key)
+                    self.key = event.key
                     self.post_message(self.Changed(self.id, self.key, old_key))
             self.capture = False
             event.stop()

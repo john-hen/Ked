@@ -91,16 +91,14 @@ class TUI(App[str], inherit_bindings=False):
     def configure_keys(self):
         """Maps keys as specified in configuration files."""
         keymap = {
-            binding.id: bindings.normalize_key(
-                config.query(('keys', binding.id))
-            )
+            binding.id: config.query(('keys', binding.id))
             for binding in (bindings.application + bindings.editor)
         }
         self.set_keymap(keymap)
 
     def get_key_display(self, binding: Binding) -> str:
         """Formats how key bindings are displayed throughout the app."""
-        return bindings.format_key(super().get_key_display(binding))
+        return bindings.key_display(binding.key)
 
     def get_system_commands(self, screen: Screen) -> Iterable[SystemCommand]:
         """Populates the command palette."""
