@@ -32,29 +32,32 @@ https://textual.textualize.io/guide/design/#base-colors
     }
     #panels {
     }
-    .grid-label-value {
-    }
-    .grid-label-value Label {
-    }
-    .grid-label-value Select {
-    }
-    .grid-label-value Select SelectOverlay {
-    }
-    .grid-label-value Select SelectCurrent {
-    }
-    .grid-label-value Select:focus SelectCurrent {
+    #theme-panel {
+        #theme-grid {
+        }
+        .row {
+            background: orange;
+        }
+        .label {
+        }
+        .select SelectOverlay {
+        }
+        .select SelectCurrent {
+        }
+        .select:focus SelectCurrent {
+        }
     }
     #keys-panel {
-    }
-    #keys-scroll {
-    }
-    .key-row {
-    }
-    .key-input {
-    }
-    .key-action {
-    }
-    #buttons {
+        #keys-scroll {
+        }
+        .row {
+        }
+        .input {
+        }
+        .action {
+        }
+        #buttons {
+        }
     }
 }
 

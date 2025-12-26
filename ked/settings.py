@@ -38,42 +38,45 @@ class Settings(ModalScreen):
             height: 1fr;
             margin: 1 1;
         }
-        .grid-label-value {
-            grid-size:    2;
-            grid-columns: auto auto;
-            grid-rows:    auto;
-            grid-gutter:  1 3;
-            padding:      0 1;
-        }
-        .grid-label-value Label {
-            content-align: left middle;
-            height:        1fr;
-        }
-        .grid-label-value Select {
-        }
-        .grid-label-value Select SelectOverlay {
-            border: round $border;
-        }
-        .grid-label-value Select SelectCurrent {
-            border: round $border;
-        }
-        .grid-label-value Select:focus SelectCurrent {
-            border: round $border;
+        #theme-panel {
+            #theme-grid {
+                grid-size:    2;
+                grid-columns: auto auto;
+                grid-rows:    auto;
+                grid-gutter:  1 3;
+                padding:      0 1;
+                overflow-y:   auto;
+            }
+            .row {
+            }
+            .label {
+                content-align: left middle;
+                height:        1fr;
+            }
+            .select SelectOverlay {
+                border: round $border;
+            }
+            .select SelectCurrent {
+                border: round $border;
+            }
+            .select:focus SelectCurrent {
+                border: round $border;
+            }
         }
         #keys-panel {
-        }
-        #keys-scroll {
-        }
-        .key-row {
-            height: auto;
-        }
-        .key-input {
-            width: 20;
-        }
-        .key-action {
-            height:        100%;
-            padding-left:  1;
-            content-align: center middle;
+            #keys-scroll {
+            }
+            .row {
+                height: auto;
+            }
+            .input {
+                width: 20;
+            }
+            .action {
+                height:        100%;
+                padding-left:  1;
+                content-align: center middle;
+            }
         }
         #buttons {
             margin-top: 1;
@@ -144,29 +147,31 @@ class Settings(ModalScreen):
 
             with TabbedContent(id='panels'):
 
-                with TabPane('Theme', id='panel_theme'):
-                    with Grid(classes='grid-label-value'):
-                        yield Label('application', id='label-theme-app')
+                with TabPane('Theme', id='theme-panel'):
+                    with Grid(id='theme-grid'):
+                        yield Label('application', classes='label')
                         yield Select.from_values(
                             values      = themes_app,
                             value       = theme_app,
                             allow_blank = False,
+                            classes     = 'select',
                             id          = 'theme-app',
                         )
-                        yield Label('code syntax', id='label-theme-syntax')
+                        yield Label('code syntax', classes='label')
                         yield Select.from_values(
                             values      = themes_syntax,
                             value       = theme_syntax,
                             allow_blank = False,
+                            classes     = 'select',
                             id          = 'theme-syntax',
                         )
 
                 with TabPane('Keys', id='keys-panel'):
                     with VerticalScroll(id='keys-scroll', can_focus=False):
                         for (id, (tooltip, key)) in bindings_map.items():
-                            with Horizontal(classes='key-row'):
-                                yield KeyInput(key, id=id, classes='key-input')
-                                yield Label(tooltip, classes='key-action')
+                            with Horizontal(classes='row'):
+                                yield KeyInput(key, id=id, classes='input')
+                                yield Label(tooltip, classes='action')
 
             with Horizontal(id='buttons'):
                 yield Button(
