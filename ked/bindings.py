@@ -43,7 +43,7 @@ application = [
     Binding(
         key         = '<ignore>',
         action      = 'command_palette',
-        description = 'Commands',
+        description = 'Palette',
         tooltip     = 'Show the command palette.',
         id          = 'command_palette',
     ),
