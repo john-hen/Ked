@@ -106,19 +106,19 @@ class TUI(App[str], inherit_bindings=False):
             (
                 'About',
                 'Show information about the application.',
-                'about',
+                'show_about',
                 self.action_show_about,
             ),
             (
                 'Help',
                 'Show help panel with key bindings.',
-                'help',
+                'show_help',
                 self.action_show_help,
             ),
             (
                 'Settings',
                 'Open configuration settings.',
-                'settings',
+                'open_settings',
                 self.action_open_settings,
             ),
             (
