@@ -44,6 +44,16 @@ https://textual.textualize.io/guide/design/#base-colors
     }
     .grid-label-value Select:focus SelectCurrent {
     }
+    #keys-panel {
+    }
+    #keys-scroll {
+    }
+    .key-row {
+    }
+    .key-input {
+    }
+    .key-action {
+    }
     #buttons {
     }
 }

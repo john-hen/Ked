@@ -1,7 +1,9 @@
 """Settings dialog with configuration options"""
 
-from .       import config
-from .editor import Editor
+from .        import config
+from .        import bindings
+from .editor  import Editor
+from .widgets import KeyInput
 
 from textual.screen     import ModalScreen
 from textual.widgets    import TabbedContent
@@ -11,6 +13,7 @@ from textual.widgets    import Label
 from textual.widgets    import Button
 from textual.containers import Grid
 from textual.containers import Vertical
+from textual.containers import VerticalScroll
 from textual.containers import Horizontal
 from textual.app        import ComposeResult
 
@@ -57,9 +60,24 @@ class Settings(ModalScreen):
         .grid-label-value Select:focus SelectCurrent {
             border: round $border;
         }
+        #keys-panel {
+        }
+        #keys-scroll {
+        }
+        .key-row {
+            height: auto;
+        }
+        .key-input {
+            width: 20;
+        }
+        .key-action {
+            height:        100%;
+            padding-left:  1;
+            content-align: center middle;
+        }
         #buttons {
             margin-top: 1;
-            height: auto;
+            height:     auto;
             Button {
                 margin-top:    1;
                 margin-bottom: 0;
@@ -112,10 +130,19 @@ class Settings(ModalScreen):
         themes_syntax = [theme.ljust(padding) for theme in themes]
         theme_syntax  = self.editor.theme.ljust(padding)
 
+        # Get a map of binding ids to tooltip and key designation.
+        bindings_map = {
+            binding.id: (
+                binding.tooltip,
+                config.query(('keys', binding.id))
+            )
+            for binding in (bindings.application + bindings.editor)
+        }
+
         with Vertical(id='frame') as frame:
             frame.border_title = 'Settings'
 
-            with TabbedContent(id='panels'):    # noqa: SIM117 (combine with's)
+            with TabbedContent(id='panels'):
 
                 with TabPane('Theme', id='panel_theme'):
                     with Grid(classes='grid-label-value'):
@@ -133,6 +160,13 @@ class Settings(ModalScreen):
                             allow_blank = False,
                             id          = 'theme-syntax',
                         )
+
+                with TabPane('Keys', id='keys-panel'):
+                    with VerticalScroll(id='keys-scroll', can_focus=False):
+                        for (id, (tooltip, key)) in bindings_map.items():
+                            with Horizontal(classes='key-row'):
+                                yield KeyInput(key, id=id, classes='key-input')
+                                yield Label(tooltip, classes='key-action')
 
             with Horizontal(id='buttons'):
                 yield Button(
@@ -155,6 +189,10 @@ class Settings(ModalScreen):
                 self.preview_theme_app(event.value.rstrip())
             case 'theme-syntax':
                 self.preview_theme_syntax(event.value.rstrip())
+
+    def on_key_input_changed(self, message: KeyInput.Changed):
+        """Event triggered when user assigned a new key."""
+        self.update_pending(('keys', message.id), message.key, message.old)
 
     def preview_theme_app(self, theme: str):
         """Previews the selected application theme."""
@@ -189,6 +227,7 @@ class Settings(ModalScreen):
         """Saves changed settings to disk."""
         for (setting, (value_new, _)) in self.pending.items():
             config.store(setting, value_new)
+        self.app.configure_keys()
         self.dismiss()
 
     def action_cancel(self):

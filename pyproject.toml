@@ -103,6 +103,7 @@ ignore = [
     "E272",               # multiple spaces before keyword
     "E731",               # assignment of `lambda` expression
     "SIM108",             # ternary operator instead of if-else
+    "SIM117",             # nested with statements
     "PT013",              # incorrect pytest import
     "PTH201",             # never use `Path('.')`
     "RUF013",             # implicit `Optional` by assigning `None`

@@ -19,16 +19,16 @@ class Editor(TextArea, inherit_bindings=False):
     """Main widget for editing a file"""
 
     file: reactive[Path | None] = reactive(None)
-    """The file being edited."""
+    """file being edited"""
 
     encoding: str = ''
-    """The detected text encoding of the file."""
+    """detected text encoding of the file"""
 
     newline: str = ''
-    """The character sequence marking line endings in the file."""
+    """character sequence marking line endings in the file"""
 
     saved_as: list[list[Edit]] = None
-    """The undo stack when the file was last save or first loaded."""
+    """undo stack when file was last saved or first loaded"""
 
     class FileLoaded(Message):
         """Message posted when a file was loaded."""

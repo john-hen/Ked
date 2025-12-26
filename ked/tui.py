@@ -10,13 +10,13 @@ from .help      import Help
 from .about     import About
 from .settings  import Settings
 
-from textual.app       import App
-from textual.app       import ComposeResult
-from textual.app       import SystemCommand
-from textual.binding   import Binding
-from textual.reactive  import reactive
-from textual.screen    import Screen
-from textual.events    import Key
+from textual.app      import App
+from textual.app      import ComposeResult
+from textual.app      import SystemCommand
+from textual.binding  import Binding
+from textual.reactive import reactive
+from textual.screen   import Screen
+from textual.events   import Key
 
 from pathlib         import Path
 from collections.abc import Iterable
@@ -26,16 +26,16 @@ class TUI(App[str], inherit_bindings=False):
     """Text-based user interface of the application"""
 
     file: reactive[Path | None] = reactive(None)
-    """The file being edited."""
+    """file being edited"""
 
     encoding: reactive[str] = reactive('')
-    """The text encoding of the file."""
+    """text encoding of the file"""
 
     newline: reactive[str] = reactive('')
-    """The line endings of the file."""
+    """line endings of the file"""
 
     cursor: reactive[tuple[int, int]] = reactive((1, 1))
-    """The current cursor position."""
+    """current cursor position"""
 
     TITLE     = meta.name
     SUB_TITLE = meta.summary
@@ -60,37 +60,7 @@ class TUI(App[str], inherit_bindings=False):
     def on_mount(self):
         """Event triggered when app is ready to process messages."""
         self.theme = config.query(('theme', 'app'))
-        binding_ids = (
-            # Application
-            'quit_app', 'show_help', 'command_palette',
-            'open_settings', 'show_about',
-            # File operations
-            'save', 'trim_whitespace', 'toggle_wrapping',
-            # Clipboard interaction
-            'cut', 'copy', 'paste',
-            # Edit history
-            'undo', 'redo',
-            # Cursor movement
-            'cursor_up', 'cursor_down', 'cursor_left', 'cursor_right',
-            'cursor_word_left', 'cursor_word_right',
-            'cursor_line_start', 'cursor_line_end',
-            'cursor_page_up', 'cursor_page_down',
-            'cursor_file_start', 'cursor_file_end',
-            # Text deletion
-            'delete_left', 'delete_right',
-            'delete_word_left', 'delete_word_right',
-            # Selections
-            'select_left', 'select_right',
-            'select_word_left', 'select_word_right',
-            'select_line_start', 'select_line_end',
-            'select_line_up', 'select_line_down',
-            'select_all',
-        )
-        keymap = {
-            binding: bindings.normalize_key(config.query(('keys', binding)))
-            for binding in binding_ids
-        }
-        self.set_keymap(keymap)
+        self.configure_keys()
 
     async def on_key(self, event: Key):
         """Event triggered when the user presses a key."""
@@ -117,6 +87,16 @@ class TUI(App[str], inherit_bindings=False):
     def on_editor_cursor_moved(self):
         """Event triggered when cursor was moved in editor."""
         self.cursor = self.editor.cursor_location
+
+    def configure_keys(self):
+        """Maps keys as specified in configuration files."""
+        keymap = {
+            binding.id: bindings.normalize_key(
+                config.query(('keys', binding.id))
+            )
+            for binding in (bindings.application + bindings.editor)
+        }
+        self.set_keymap(keymap)
 
     def get_key_display(self, binding: Binding) -> str:
         """Formats how key bindings are displayed throughout the app."""
