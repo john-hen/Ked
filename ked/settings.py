@@ -70,7 +70,7 @@ class Settings(ModalScreen):
                 height: auto;
             }
             .input {
-                width: 20;
+                width: 10;
             }
             .action {
                 height:        100%;

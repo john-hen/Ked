@@ -390,9 +390,18 @@ def key_display(key: str) -> str:
         'delete':   'Del',
         'pageup':   'PgUp',
         'pagedown': 'PgDn',
+        'backspace': '⌫',
+        'tab':       '⇥',
+        'enter':     '↵',
+        'up':        '↑',
+        'down':      '↓',
+        'left':      '←',
+        'right':     '→',
     }
     parts = [rename.get(part, part.title()) for part in key.split('+')]
-    if len(parts) == 2 and parts[0] == 'Ctrl':
-        parts = (f'^{parts[1]}',)
-    display = '+'.join(parts)
+    display = (
+        '+'.join(parts)
+        .replace('Ctrl+', '^')
+        .replace('Shift+', '⇧')
+    )
     return display
