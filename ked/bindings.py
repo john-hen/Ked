@@ -78,6 +78,14 @@ editor = [
     ),
     Binding(
         key         = '<ignore>',
+        action      = 'save_as',
+        description = 'Save as',
+        tooltip     = 'Save file under a different name.',
+        show        = False,
+        id          = 'save_as',
+    ),
+    Binding(
+        key         = '<ignore>',
         action      = 'trim_whitespace',
         description = 'Trim white-space',
         tooltip     = 'Trim trailing white-space characters.',

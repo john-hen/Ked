@@ -122,6 +122,12 @@ class TUI(App[str], inherit_bindings=False):
                 self.action_open_settings,
             ),
             (
+                'Save as',
+                'Save file under different name.',
+                'save_as',
+                self.editor.action_save_as,
+            ),
+            (
                 'Trim',
                 'Trim trailing white-space.',
                 'trim_whitespace',

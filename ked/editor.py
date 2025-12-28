@@ -2,6 +2,7 @@
 
 from . import config
 from . import bindings
+from . import dialogs
 
 from textual.widgets           import TextArea
 from textual.widgets.text_area import Edit
@@ -122,6 +123,24 @@ class Editor(TextArea, inherit_bindings=False):
         )
         self.saved_as = self.history.undo_stack.copy()
         self.refresh_bindings()
+
+    def action_save_as(self):
+        """Asks the user for a new name to save the file as."""
+        if not self.file:
+            return
+        dialog = dialogs.TextInput('Save file as:', self.file.name)
+        self.app.push_screen(dialog, self.answered_save_as)
+
+    def answered_save_as(self, answer: str):
+        """Called when the user entered a new file to save as."""
+        path = Path(answer)
+        if path.is_absolute():
+            file = path
+        else:
+            file = self.file.parent / path
+        self.set_reactive(Editor.file, file)
+        self.post_message(self.FileLoaded())
+        self.action_save()
 
     def action_trim_whitespace(self):
         """Trims trailing white-space characters."""

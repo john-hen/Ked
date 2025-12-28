@@ -11,6 +11,7 @@ keys:
     "show_about":         ""
     # File operations
     "save":               "ctrl+s"
+    "save_as":            ""
     "trim_whitespace":    "ctrl+t"
     "toggle_wrapping":    "ctrl+l"
     # Clipboard interaction
