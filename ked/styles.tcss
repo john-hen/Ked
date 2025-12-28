@@ -103,3 +103,22 @@ ClickResponse {
     .button:last-child {
     }
 }
+
+TextInput {
+    #frame {
+    }
+    #input-row {
+    }
+    #label {
+    }
+    #input {
+    }
+    #button-row {
+    }
+    .button {
+    }
+    #accept {
+    }
+    #cancel {
+    }
+}
