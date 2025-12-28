@@ -13,7 +13,8 @@ from textual.events            import MouseDown
 
 import os
 import tokenize
-from pathlib import Path
+from functools import partial
+from pathlib   import Path
 
 
 class Editor(TextArea, inherit_bindings=False):
@@ -132,12 +133,30 @@ class Editor(TextArea, inherit_bindings=False):
         self.app.push_screen(dialog, self.answered_save_as)
 
     def answered_save_as(self, answer: str):
-        """Called when the user entered a new file to save as."""
+        """Called when the user entered a new file name to save as."""
+        if not answer:
+            return
         path = Path(answer)
         if path.is_absolute():
             file = path
         else:
             file = self.file.parent / path
+        if file.exists() and file != self.file:
+            dialog = dialogs.ClickResponse(
+                'A file with that name already exists. Overwrite it?'
+            )
+            callback = partial(self.answered_overwrite, file)
+            self.app.push_screen(dialog, callback)
+        else:
+            self.save_file_as(file)
+
+    def answered_overwrite(self, file: Path, answer: str):
+        """Called when the user answered whether to overwrite existing file."""
+        if answer == 'Yes':
+            self.save_file_as(file)
+
+    def save_file_as(self, file: Path):
+        """Saves the currently edited file as the new `file`."""
         self.set_reactive(Editor.file, file)
         self.post_message(self.FileLoaded())
         self.action_save()
