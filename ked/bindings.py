@@ -347,17 +347,17 @@ editor = [
 
 horizontal_buttons = [
     Binding(
-        key    = '<ignore>',
+        key    = 'tab, right',
         action = 'app.focus_next',
         show   = False,
     ),
     Binding(
-        key    = '<ignore>',
+        key    = 'shift+tab, left',
         action = 'app.focus_previous',
         show   = False,
     ),
     Binding(
-        key    = '<ignore>',
+        key    = 'escape',
         action = 'cancel',
         show   = False,
     ),
@@ -366,17 +366,17 @@ horizontal_buttons = [
 
 vertical_buttons = [
     Binding(
-        key    = '<ignore>',
+        key    = 'tab, down',
         action = 'app.focus_next',
         show   = False,
     ),
     Binding(
-        key    = '<ignore>',
+        key    = 'shift+tab, up',
         action = 'app.focus_previous',
         show   = False,
     ),
     Binding(
-        key    = '<ignore>',
+        key    = 'escape',
         action = 'cancel',
         show   = False,
     ),
@@ -386,10 +386,10 @@ vertical_buttons = [
 def key_display(key: str) -> str:
     """Formats a Textual key designation for (nicer) display in the app."""
     rename = {
-        'escape':   'Esc',
-        'delete':   'Del',
-        'pageup':   'PgUp',
-        'pagedown': 'PgDn',
+        'escape':    'Esc',
+        'delete':    'Del',
+        'pageup':    'PgUp',
+        'pagedown':  'PgDn',
         'backspace': '⌫',
         'tab':       '⇥',
         'enter':     '↵',
