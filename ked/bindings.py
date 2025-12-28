@@ -345,7 +345,7 @@ editor = [
 ]
 
 
-horizontal_buttons = [
+dialog = [
     Binding(
         key    = 'tab, right',
         action = 'app.focus_next',
@@ -353,25 +353,6 @@ horizontal_buttons = [
     ),
     Binding(
         key    = 'shift+tab, left',
-        action = 'app.focus_previous',
-        show   = False,
-    ),
-    Binding(
-        key    = 'escape',
-        action = 'cancel',
-        show   = False,
-    ),
-]
-
-
-vertical_buttons = [
-    Binding(
-        key    = 'tab, down',
-        action = 'app.focus_next',
-        show   = False,
-    ),
-    Binding(
-        key    = 'shift+tab, up',
         action = 'app.focus_previous',
         show   = False,
     ),

@@ -86,3 +86,20 @@ https://textual.textualize.io/guide/design/#base-colors
     #text {
     }
 }
+
+ClickResponse {
+    #frame {
+    }
+    #prompt-row {
+    }
+    #prompt {
+    }
+    #button-row {
+    }
+    .button:first-child {
+    }
+    .button {
+    }
+    .button:last-child {
+    }
+}

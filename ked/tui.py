@@ -195,15 +195,18 @@ class TUI(App[str], inherit_bindings=False):
         """Called when the user wants to quit the application."""
         if not self.editor.modified:
             self.exit()
+        dialog = dialogs.ClickResponse(
+            'There are unsaved changes to the file. What to do?',
+            buttons  = ('Save',    'Quit',    'Cancel'),
+            variants = ('primary', 'warning', 'default'),
+        )
+        self.push_screen(dialog, self.answered_unsaved_changes)
 
-        def follow_up(button: str):
-            match button:
-                case 'save':
-                    self.editor.action_save()
-                    self.exit()
-                case 'quit':
-                    self.exit()
-                case 'cancel':
-                    pass
-
-        self.push_screen(dialogs.UnsavedFile(), follow_up)
+    def answered_unsaved_changes(self, answer: str):
+        """Called when the user answered how to deal with unsaved changes."""
+        match answer:
+            case 'Save':
+                self.editor.action_save()
+                self.exit()
+            case 'Quit':
+                self.exit()
