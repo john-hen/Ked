@@ -8,11 +8,71 @@ from textual.widgets    import Label
 from textual.widgets    import Input
 from textual.containers import VerticalGroup
 from textual.containers import HorizontalGroup
+from textual.containers import Center
 from textual.containers import Right
 from textual.app        import ComposeResult
 
 from collections.abc import Sequence
 from typing          import Any
+
+
+class MessageBox(ModalScreen[None]):
+    """Pop-up that displays a message/warning/error to the user."""
+
+    BINDINGS = bindings.dialog
+
+    DEFAULT_CSS = """
+        MessageBox {
+            align-horizontal: center;
+            align-vertical:   middle;
+            #frame {
+                width:      auto;
+                max-width:  60;
+                border:     round $border;
+                background: $background;
+                padding:    1 2;
+                align:      center middle;
+            }
+            #message-row {
+            }
+            #message {
+            }
+            #button-row {
+                margin-top: 2;
+            }
+            #button {
+            }
+        }
+    """
+
+    def __init__(self,
+        message:  str,
+        title:    str = '',
+        button:   str = 'Okay',
+        **kwargs: Any,
+    ):
+        self.message = message
+        self.title_  = title
+        self.button  = button
+        super().__init__(**kwargs)
+
+    def compose(self) -> ComposeResult:
+        """Composes the message box."""
+        with VerticalGroup(id='frame') as frame:
+            if self.title_:
+                frame.border_title = self.title_
+            with Center(id='message-row'):
+                yield Label(self.message, id='message', shrink=True)
+            with Center(id='button-row'):
+                yield Button(self.button, id='button')
+
+    def on_button_pressed(self, _event: Button.Pressed):
+        """Closes the message box when the user pressed the button."""
+        self.dismiss()
+
+    def action_cancel(self):
+        """Closes the message box when the user pressed Esc."""
+        self.dismiss()
 
 
 class ClickResponse(ModalScreen[str]):

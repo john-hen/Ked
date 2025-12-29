@@ -87,6 +87,19 @@ https://textual.textualize.io/guide/design/#base-colors
     }
 }
 
+MessageBox {
+    #frame {
+    }
+    #message-row {
+    }
+    #message {
+    }
+    #button-row {
+    }
+    #button {
+    }
+}
+
 ClickResponse {
     #frame {
     }

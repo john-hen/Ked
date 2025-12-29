@@ -130,9 +130,9 @@ class Editor(TextArea, inherit_bindings=False):
         if not self.file:
             return
         dialog = dialogs.TextInput('Save file as:', self.file.name)
-        self.app.push_screen(dialog, self.answered_save_as)
+        self.app.push_screen(dialog, self.save_as_entered)
 
-    def answered_save_as(self, answer: str):
+    def save_as_entered(self, answer: str):
         """Called when the user entered a new file name to save as."""
         if not answer:
             return
@@ -142,20 +142,29 @@ class Editor(TextArea, inherit_bindings=False):
         else:
             file = self.file.parent / path
         if file.exists() and file != self.file:
-            dialog = dialogs.ClickResponse(
-                'A file with that name already exists. Overwrite it?'
-            )
-            callback = partial(self.answered_overwrite, file)
-            self.app.push_screen(dialog, callback)
+            if file.is_dir():
+                self.app.push_screen(
+                    dialogs.MessageBox(
+                        'Cannot save file under that name as a folder with '
+                        'the same name exists.',
+                        title='Error',
+                    )
+                )
+            else:
+                dialog = dialogs.ClickResponse(
+                    'A file with that name already exists. Overwrite it?'
+                )
+                callback = partial(self.save_as_overwrite, file)
+                self.app.push_screen(dialog, callback)
         else:
-            self.save_file_as(file)
+            self.save_as_execute(file)
 
-    def answered_overwrite(self, file: Path, answer: str):
+    def save_as_overwrite(self, file: Path, answer: str):
         """Called when the user answered whether to overwrite existing file."""
         if answer == 'Yes':
-            self.save_file_as(file)
+            self.save_as_execute(file)
 
-    def save_file_as(self, file: Path):
+    def save_as_execute(self, file: Path):
         """Saves the currently edited file as the new `file`."""
         self.set_reactive(Editor.file, file)
         self.post_message(self.FileLoaded())
