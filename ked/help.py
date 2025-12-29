@@ -16,12 +16,8 @@ The following key bindings have been configured:
 
 epilog = """
 If any of the key bindings don't work, it may be that they are already in use
-by your terminal emulator. The terminal will only forward the combinations it
-isn't reacting to itself to the application that is running inside it.
-
-In a future version, the above key bindings will be configurable. But in the
-meantime, you may consider changing the settings of your terminal to make sure
-its key bindings don't clash with the editor.
+by your terminal emulator. The terminal will only forward the key combinations
+it isn't reacting to itself to the application that is running inside it.
 """
 
 
@@ -57,6 +53,7 @@ class Help(ModalScreen):
     )
 
     def compose(self) -> ComposeResult:
+        """Composes the dialog."""
         with VerticalScroll(id='frame') as frame:
             frame.border_title = 'Help'
             yield Markdown(prolog, id='prolog')
@@ -68,6 +65,7 @@ class KeyBindings(Static):
     """Widget displaying a table with the key bindings"""
 
     def render(self) -> Table:
+        """Renders the widget."""
         editor = self.app.query_exactly_one('#editor')
         screen = editor.screen
         app_bindings    = {}

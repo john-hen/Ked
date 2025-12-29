@@ -26,7 +26,7 @@ class TUI(App[str], inherit_bindings=False):
     """Text-based user interface of the application"""
 
     file: reactive[Path | None] = reactive(None)
-    """file being edited"""
+    """file currently being edited"""
 
     encoding: reactive[str] = reactive('')
     """text encoding of the file"""
@@ -35,7 +35,7 @@ class TUI(App[str], inherit_bindings=False):
     """line endings of the file"""
 
     cursor: reactive[tuple[int, int]] = reactive((1, 1))
-    """current cursor position"""
+    """current cursor position in the editor"""
 
     TITLE     = meta.name
     SUB_TITLE = meta.summary
@@ -54,17 +54,16 @@ class TUI(App[str], inherit_bindings=False):
 
     @property
     def editor(self) -> Editor:
-        """Convenience property that returns the (single) editor widget."""
+        """Queries the (single) editor widget."""
         return self.app.query_exactly_one('#editor', expect_type=Editor)
 
     def on_mount(self):
-        """Event triggered when app is ready to process messages."""
+        """Sets theme and key bindings according to configuration."""
         self.theme = config.query(('theme', 'app'))
         self.configure_keys()
 
     async def on_key(self, event: Key):
-        """Event triggered when the user presses a key."""
-        # Work around issue that Ctrl+Backspace doesn't trigger its action.
+        """Works around issue that pressing "^⌫" doesn't trigger its action."""
         if event.key == 'backspace' and event.character == '\x08':
             active_bindings = self.app.screen.active_bindings
             for (node, binding, enabled, _) in active_bindings.values():
@@ -73,19 +72,19 @@ class TUI(App[str], inherit_bindings=False):
                     await node.run_action(binding.action)
 
     def on_editor_encoding_detected(self):
-        """Event triggered when editor detected the text encoding."""
+        """Propagates detected text encoding to status bar."""
         self.encoding = self.editor.encoding
 
     def on_editor_newline_detected(self):
-        """Event triggered when editor detected the line endings."""
+        """Propagates detected line endings to status bar."""
         self.newline = self.editor.newline
 
     def on_editor_file_loaded(self):
-        """Event triggered when editor loaded a file."""
+        """Propagates new file name to status bar."""
         self.file = self.editor.file
 
     def on_editor_cursor_moved(self):
-        """Event triggered when cursor was moved in editor."""
+        """Propagates new cursor position to status bar."""
         self.cursor = self.editor.cursor_location
 
     def configure_keys(self):
@@ -198,7 +197,7 @@ class TUI(App[str], inherit_bindings=False):
         file.write_text(svg, encoding='UTF-8')
 
     def action_quit(self):
-        """Called when the user wants to quit the application."""
+        """Makes sure we don't quit when there are unsaved changes."""
         if not self.editor.modified:
             self.exit()
         dialog = dialogs.ClickResponse(
@@ -206,10 +205,10 @@ class TUI(App[str], inherit_bindings=False):
             buttons  = ('Save',    'Quit',    'Cancel'),
             variants = ('primary', 'warning', 'default'),
         )
-        self.push_screen(dialog, self.answered_unsaved_changes)
+        self.push_screen(dialog, self.quit_unsaved_changes)
 
-    def answered_unsaved_changes(self, answer: str):
-        """Called when the user answered how to deal with unsaved changes."""
+    def quit_unsaved_changes(self, answer: str):
+        """Reacts to how the user wants to deal with unsaved changes."""
         self.log(f'answer: {answer}')
         match answer:
             case 'Save':

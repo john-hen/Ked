@@ -45,7 +45,7 @@ class KeyInput(Label, can_focus=True):
         self.key = key
 
     def render(self) -> str:
-        """Renders the widget."""
+        """Renders the key input."""
         if self.capture:
             self.tooltip = 'Press key or key combination. Press Del to unset.'
             return 'Press key…'
@@ -56,7 +56,7 @@ class KeyInput(Label, can_focus=True):
             return key_display
 
     async def on_key(self, event: Key) -> None:
-        """Event triggered when user presses a key."""
+        """Captures key presses."""
         if not self.capture:
             if event.key == 'enter':
                 self.capture = True
@@ -84,10 +84,10 @@ class KeyInput(Label, can_focus=True):
             event.stop()
 
     def on_blur(self, _event: Blur):
-        """Event triggered when widget loses focus."""
+        """Stops key capture when losing focus."""
         self.capture = False
 
     async def on_mouse_up(self, _event: MouseDown):
-        """Event triggered when user presses a mouse button."""
+        """Starts key capture when user clicks the widget."""
         if self.has_focus:
             self.capture = True

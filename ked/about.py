@@ -102,6 +102,7 @@ class About(ModalScreen):
     )
 
     def compose(self) -> ComposeResult:
+        """Composes the dialog."""
         with VerticalScroll(id='frame') as frame:
             frame.border_title = 'About'
             with Center():

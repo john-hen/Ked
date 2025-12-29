@@ -18,10 +18,10 @@ from pathlib   import Path
 
 
 class Editor(TextArea, inherit_bindings=False):
-    """Main widget for editing a file"""
+    """Widget for editing a file"""
 
     file: reactive[Path | None] = reactive(None)
-    """file being edited"""
+    """file currently being edited"""
 
     encoding: str = ''
     """detected text encoding of the file"""
@@ -30,19 +30,19 @@ class Editor(TextArea, inherit_bindings=False):
     """character sequence marking line endings in the file"""
 
     saved_as: list[list[Edit]] = None
-    """undo stack when file was last saved or first loaded"""
+    """undo stack when file was last saved, empty when loaded"""
 
     class FileLoaded(Message):
-        """Message posted when a file was loaded."""
+        """Message posted when a file was loaded"""
 
     class EncodingDetected(Message):
-        """Message posted when text encoding was detected."""
+        """Message posted when text encoding was detected"""
 
     class NewlineDetected(Message):
-        """Message posted when line endings were detected."""
+        """Message posted when line endings were detected"""
 
     class CursorMoved(Message):
-        """Message posted when cursor was moved."""
+        """Message posted when cursor was moved"""
 
     BINDINGS = bindings.editor
 
@@ -64,7 +64,7 @@ class Editor(TextArea, inherit_bindings=False):
         )
 
     def on_mount(self):
-        """Event triggered when widget is ready to process messages."""
+        """Called when widget is ready to process messages."""
         self.theme = config.query(('theme', 'syntax'))
 
     def watch_file(self, file: Path | None):
@@ -104,15 +104,15 @@ class Editor(TextArea, inherit_bindings=False):
         self.post_message(self.CursorMoved())
 
     def on_key(self, _event: Key):
-        """Event triggered when the user presses a key."""
+        """Posts message that cursor moved on every key press."""
         self.post_message(self.CursorMoved())
 
     def on_mouse_up(self, _event: MouseDown):
-        """Event triggered when the user releases a mouse button."""
+        """Posts message that cursor moved when a mouse button was released."""
         self.post_message(self.CursorMoved())
 
     def on_text_area_changed(self):
-        """Event triggered when the user modified the text."""
+        """Makes sure the "Save" action is correctly grayed out or not."""
         self.refresh_bindings()
 
     def action_save(self):
@@ -211,7 +211,7 @@ class Editor(TextArea, inherit_bindings=False):
             self.refresh_bindings()
 
     def action_toggle_wrapping(self):
-        """Toggles the soft-wrapping of lines."""
+        """Toggles soft-wrapping of lines."""
         self.soft_wrap = not self.soft_wrap
 
     def action_cursor_file_start(self):
@@ -234,7 +234,7 @@ class Editor(TextArea, inherit_bindings=False):
 
     @property
     def modified(self):
-        """Returns whether the file has been modified since it was saved."""
+        """Indicates whether the file has been modified since it was saved."""
         return (self.history.undo_stack != self.saved_as)
 
 
@@ -243,7 +243,7 @@ def detect_encoding(file: Path) -> str:
     Detects the text encoding of the given file.
 
     Uses the `tokenize` module from the Python standard library under the hood,
-    and is thus limited to the same encodings.
+    and is thus limited to the same few encodings.
     """
     with file.open('rb') as stream:
         (encoding, _line) = tokenize.detect_encoding(stream.readline)

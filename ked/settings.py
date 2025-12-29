@@ -100,7 +100,7 @@ class Settings(ModalScreen):
         self.pending: dict[
             config.Setting, tuple[config.Value, config.Value]
         ] = {}
-        """Settings to be stored on save or rolled back when canceled"""
+        """settings to be stored on save or rolled back when canceled"""
 
     @property
     def editor(self) -> Editor:
@@ -189,7 +189,7 @@ class Settings(ModalScreen):
                 )
 
     def on_select_changed(self, event: Select.Changed):
-        """Event triggered when an item was selected in a drop-down list."""
+        """Previews a newly selected theme."""
         match event.select.id:
             case 'theme-app':
                 self.preview_theme_app(event.value.rstrip())
@@ -197,7 +197,7 @@ class Settings(ModalScreen):
                 self.preview_theme_syntax(event.value.rstrip())
 
     def on_key_input_changed(self, message: KeyInput.Changed):
-        """Event triggered when user assigned a new key."""
+        """Remembers a new key binding to be stored on pressing Save."""
         self.update_pending(('keys', message.id), message.key, message.old)
 
     def preview_theme_app(self, theme: str):

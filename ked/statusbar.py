@@ -14,16 +14,16 @@ class Statusbar(Footer):
     """Footer showing key bindings and status of edited file"""
 
     file: reactive[Path | None] = reactive(None)
-    """The file being edited."""
+    """file currently being edited"""
 
     encoding: reactive[str] = reactive('')
-    """The text encoding of the file."""
+    """text encoding of the file"""
 
     newline: reactive[str] = reactive('')
-    """The line endings of the file."""
+    """line endings of the file"""
 
     cursor: reactive[tuple[int, int]] = reactive((1, 1))
-    """The current cursor position in the editor."""
+    """current cursor position in the editor"""
 
     DEFAULT_CSS = """
         $footer-key-foreground: $primary;
@@ -52,7 +52,7 @@ class Statusbar(Footer):
     """
 
     def compose(self) -> ComposeResult:
-        """Composes the widget."""
+        """Composes the status bar."""
 
         with Horizontal(id='key-bindings'):
             active_bindings = self.screen.active_bindings
@@ -90,9 +90,11 @@ class Statusbar(Footer):
 class FileName(Label):
     """Displays the file name."""
 
-    file: reactive[None] = reactive(None, layout=True)
+    file: reactive[Path | None] = reactive(None, layout=True)
+    """file currently being edited"""
 
     def render(self) -> str:
+        """Renders the status display of the file name."""
         if self.file is None:
             self.tooltip = ''
             return ''
@@ -101,11 +103,13 @@ class FileName(Label):
 
 
 class TextEncoding(Label):
-    """Displays the detected text encoding of the file."""
+    """Displays the text encoding of the file."""
 
     encoding: reactive[str] = reactive('', layout=True)
+    """text encoding of the file"""
 
     def render(self) -> str:
+        """Renders the status display of the text encoding."""
         match self.encoding:
             case 'utf-8':
                 self.tooltip = 'Text encoding is UTF-8.'
@@ -118,11 +122,13 @@ class TextEncoding(Label):
 
 
 class LineEndings(Label):
-    """Displays the detected line endings of the file."""
+    """Displays the line endings of the file."""
 
     newline: reactive[str] = reactive('', layout=True)
+    """line endings of the file"""
 
     def render(self) -> str:
+        """Renders the status display of the line endings."""
         match self.newline:
             case '\r\n':
                 self.tooltip = (
@@ -145,8 +151,10 @@ class CursorPosition(Label):
     """Displays the current cursor position in the file."""
 
     cursor: reactive[tuple[int, int]] = reactive((1, 1), layout=True)
+    """current cursor position in the editor"""
 
     def render(self) -> str:
+        """Renders the status display of the cursor position."""
         (line, column) = self.cursor
         line += 1
         column += 1

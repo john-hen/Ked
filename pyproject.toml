@@ -107,6 +107,9 @@ ignore = [
     "PTH201",             # never use `Path('.')`
     "RUF013",             # implicit `Optional` by assigning `None`
 ]
+allowed-confusables = [
+    "–",                  # n-dash
+]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = [

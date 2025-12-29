@@ -1,4 +1,5 @@
 ﻿"""Persistent storage of configuration settings"""
+
 from . import meta
 
 import cyclopts
@@ -14,10 +15,10 @@ from typing    import Union
 
 
 user_dir: Path = platformdirs.user_config_path() / meta.name
-"""folder with the per-user configuration"""
+"""folder with per-user configuration"""
 
 site_dir  = platformdirs.site_config_path() / meta.name
-"""folder with the machine-wide configuration"""
+"""folder with machine-wide configuration"""
 
 file_name = 'settings.yaml'
 """name of file that stores the settings in a configuration folder"""
@@ -88,7 +89,7 @@ def store(
     value:   Value,
     target:  Literal['user', 'site'] = 'user',
 ):
-    """Stores the `value` of a `setting` in `target` configuration file."""
+    """Stores the `value` of a `setting` in `target` configuration."""
     match target:
         case 'user':
             folder = user_dir
@@ -113,7 +114,7 @@ def load(source: Literal['user', 'site', 'default']) -> Settings:
 
     This function is cached, i.e. the file corresponding to the given source
     will only be read from disk once. If the file ever changes, call
-    `load_file.clear_cache()` to invalidate the cache.
+    `load.clear_cache()` to invalidate the cache.
     """
     match source:
         case 'user':
@@ -132,7 +133,7 @@ def load(source: Literal['user', 'site', 'default']) -> Settings:
 
 
 def save(settings: Settings, target: Literal['user', 'site', 'default']):
-    """Saves settings in `target` configuration file."""
+    """Saves settings in `target` configuration."""
     match target:
         case 'user':
             file = user_dir / file_name
@@ -148,7 +149,12 @@ def save(settings: Settings, target: Literal['user', 'site', 'default']):
 
 
 def query_value(setting: Setting, settings: Settings) -> Value | None:
-    """Retrieves the value of the `setting` in the `settings` dictionary."""
+    """
+    Retrieves the value of the `setting` in the `settings` dictionary.
+
+    Returns the `value` or `None` if no such setting was found in the
+    dictionary.
+    """
     key = setting[0]
     if key not in settings:
         return None
@@ -158,7 +164,13 @@ def query_value(setting: Setting, settings: Settings) -> Value | None:
 
 
 def store_value(setting: Setting, value: Value, settings: Settings):
-    """Stores the `value` of the `setting` in the `settings` dictionary."""
+    """
+    Stores the `value` of the `setting` in the `settings` dictionary.
+
+    The setting is a tuple of strings. The last item in the tuple is the
+    key name. The preceding items are the names of higher-order dictionaries
+    that the final key–value dictionary is nested in.
+    """
     key = setting[0]
     if len(setting) == 1:
         settings[key] = value
