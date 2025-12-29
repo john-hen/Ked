@@ -366,7 +366,7 @@ dialog = [
     ),
     Binding(
         key    = 'escape',
-        action = 'cancel',
+        action = 'dismiss',
         show   = False,
     ),
 ]

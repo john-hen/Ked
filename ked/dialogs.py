@@ -17,7 +17,18 @@ from typing          import Any
 
 
 class MessageBox(ModalScreen[None]):
-    """Pop-up that displays a message/warning/error to the user."""
+    """
+    Pop-up message to be acknowledged by the user
+
+    Pass in the `message` to display, a possible `title` for the box (for
+    example "Error"), and the text to display on the accept button ("Okay"
+    being the default).
+
+    Create the message box by passing an instance of this class to
+    `app.push_screen()`. There is no result to process, the user will have to
+    dismiss the message box eventually, by either pressing the button or the
+    Esc key.
+    """
 
     BINDINGS = bindings.dialog
 
@@ -65,19 +76,24 @@ class MessageBox(ModalScreen[None]):
             with Center(id='message-row'):
                 yield Label(self.message, id='message', shrink=True)
             with Center(id='button-row'):
-                yield Button(self.button, id='button')
-
-    def on_button_pressed(self, _event: Button.Pressed):
-        """Closes the message box when the user pressed the button."""
-        self.dismiss()
-
-    def action_cancel(self):
-        """Closes the message box when the user pressed Esc."""
-        self.dismiss()
+                yield Button(self.button, id='button', action='screen.dismiss')
 
 
 class ClickResponse(ModalScreen[str]):
-    """Dialog asking the user to click a button to respond."""
+    """
+    Dialog asking user to click a button as a response
+
+    Pass in a `prompt` with a message or question to the user. Define the
+    `buttons` via the text to display on them, the default being "Yes"
+    and "No". Choose style `variants` for the buttons (like "primary",
+    "warning", "error", or "default").
+
+    There can be more than two buttons if you override the defaults. Create the
+    dialog by passing the instance of this class to `app.push_screen()` along
+    with a callback function. The latter will receive the text of the button
+    that the user clicked as a `result` parameter, or `None` if they dismissed
+    the dialog by pressing Esc.
+    """
 
     BINDINGS = bindings.dialog
 
@@ -146,13 +162,24 @@ class ClickResponse(ModalScreen[str]):
         """Reports to the caller which button the user pressed."""
         self.dismiss(event.button.id)
 
-    def action_cancel(self):
-        """Dismisses the dialog without a response to the caller."""
-        self.dismiss()
-
 
 class TextInput(ModalScreen[str]):
-    """Dialog asking the user to enter text."""
+    """
+    Dialog asking the user to enter text
+
+    Pass in the `label_text` describing what you ask the user to enter text
+    for, and an `initial_value` for that text.
+
+    By default, an "Okay" button will be shown in the "primary" variant that
+    the user can press to accept their own input and proceed, as well as a
+    "Cancel" button they can press to abort. Pressing the Esc key has the same
+    effect.
+
+    Create the input dialog by passing an instance of this class to
+    `app.push_screen()` along with a callback function. The latter will be
+    called with the value of the text input as its `result` parameter after the
+    accept button was pressed.
+    """
 
     BINDINGS = bindings.dialog
 
@@ -220,6 +247,7 @@ class TextInput(ModalScreen[str]):
                 yield Button(
                     self.accept_text,
                     variant = self.accept_variant,
+                    action  = 'screen.accept',
                     classes = 'button',
                     id      = 'accept',
                 )
@@ -227,6 +255,7 @@ class TextInput(ModalScreen[str]):
                     yield Button(
                         self.cancel_text,
                         variant = self.cancel_variant,
+                        action  = 'screen.dismiss',
                         classes = 'button',
                         id      = 'cancel',
                     )
@@ -235,18 +264,7 @@ class TextInput(ModalScreen[str]):
         """Changes focus to first button when user entered a value."""
         self.query('Button').focus()
 
-    def on_button_pressed(self, event: Button.Pressed):
+    def action_accept(self):
         """Reports the value of the input widget to the caller."""
-        match event.button.id:
-            case 'accept':
-                input = self.query_exactly_one('#input', expect_type=Input)
-                if not input.value:
-                    self.action_cancel()
-                else:
-                    self.dismiss(input.value)
-            case 'cancel':
-                self.action_cancel()
-
-    def action_cancel(self):
-        """Dismisses the dialog without a response to the caller."""
-        self.dismiss()
+        input = self.query_exactly_one('#input', expect_type=Input)
+        self.dismiss(input.value)

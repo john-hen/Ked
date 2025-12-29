@@ -210,6 +210,7 @@ class TUI(App[str], inherit_bindings=False):
 
     def answered_unsaved_changes(self, answer: str):
         """Called when the user answered how to deal with unsaved changes."""
+        self.log(f'answer: {answer}')
         match answer:
             case 'Save':
                 self.editor.action_save()
