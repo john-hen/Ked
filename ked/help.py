@@ -30,24 +30,25 @@ class Help(ModalScreen):
 
     DEFAULT_CSS = """
         Help {
-            align: right top;
-        }
-        #frame {
-            border:           round $border;
-            background:       $surface;
-            margin:           2 4;
-            width:            70;
-            min-height:       15;
-            min-width:        50;
-            scrollbar-gutter: stable;
-        }
-        #prolog {
-            margin-top: 1;
-        }
-        #keys {
-        }
-        #epilog {
-            margin-top: 1;
+            align:      right top;
+            background: black 20%;
+            #frame {
+                border:           round $border;
+                background:       $surface;
+                margin:           2 4;
+                width:            70;
+                min-height:       15;
+                min-width:        50;
+                scrollbar-gutter: stable;
+            }
+            #prolog {
+                margin-top: 1;
+            }
+            #keys {
+            }
+            #epilog {
+                margin-top: 1;
+            }
         }
     """
 

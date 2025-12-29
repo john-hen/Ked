@@ -23,69 +23,70 @@ class Settings(ModalScreen):
 
     DEFAULT_CSS = """
         Settings {
-            align: right top;
-        }
-        #frame {
-            border:     round $border;
-            background: $surface;
-            margin:     2 4;
-            width:      80;
-            height:     1fr;
-            min-height: 15;
-            min-width:  70;
-        }
-        #panels {
-            height: 1fr;
-            margin: 1 1;
-        }
-        #theme-panel {
-            #theme-grid {
-                grid-size:    2;
-                grid-columns: auto auto;
-                grid-rows:    auto;
-                grid-gutter:  1 3;
-                padding:      0 1;
-                overflow-y:   auto;
+            align:      right top;
+            background: black 20%;
+            #frame {
+                border:     round $border;
+                background: $surface;
+                margin:     2 4;
+                width:      80;
+                height:     1fr;
+                min-height: 15;
+                min-width:  70;
             }
-            .row {
+            #panels {
+                height: 1fr;
+                margin: 1 1;
             }
-            .label {
-                content-align: left middle;
-                height:        1fr;
+            #theme-panel {
+                #theme-grid {
+                    grid-size:    2;
+                    grid-columns: auto auto;
+                    grid-rows:    auto;
+                    grid-gutter:  1 3;
+                    padding:      0 1;
+                    overflow-y:   auto;
+                }
+                .row {
+                }
+                .label {
+                    content-align: left middle;
+                    height:        1fr;
+                }
+                .select SelectOverlay {
+                    border: round $border;
+                }
+                .select SelectCurrent {
+                    border: round $border;
+                }
+                .select:focus SelectCurrent {
+                    border: round $border;
+                }
             }
-            .select SelectOverlay {
-                border: round $border;
+            #keys-panel {
+                #keys-scroll {
+                }
+                .row {
+                    height: auto;
+                }
+                .input {
+                    width: 12;
+                }
+                .action {
+                    height:        100%;
+                    padding-left:  1;
+                    content-align: center middle;
+                }
             }
-            .select SelectCurrent {
-                border: round $border;
-            }
-            .select:focus SelectCurrent {
-                border: round $border;
-            }
-        }
-        #keys-panel {
-            #keys-scroll {
-            }
-            .row {
-                height: auto;
-            }
-            .input {
-                width: 12;
-            }
-            .action {
-                height:        100%;
-                padding-left:  1;
-                content-align: center middle;
-            }
-        }
-        #buttons {
-            margin-top: 1;
-            height:     auto;
-            Button {
-                margin-top:    1;
-                margin-bottom: 0;
-                margin-left:   2;
-                margin-right:  5;
+            #buttons {
+                margin-top: 1;
+                height:     auto;
+                Button {
+                    margin-top:    1;
+                    margin-bottom: 0;
+                    margin-left:   2;
+                    margin-right:  5;
+                }
             }
         }
     """

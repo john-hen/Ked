@@ -78,21 +78,22 @@ class About(ModalScreen):
 
     DEFAULT_CSS = """
         About {
-            align: right top;
-        }
-        #frame {
-            border:           round $border;
-            background:       $surface;
-            margin:           2 4;
-            width:            70;
-            min-height:       15;
-            min-width:        50;
-            scrollbar-gutter: stable;
-        }
-        #logo {
-            text-style: bold;
-        }
-        #text {
+            align:      right top;
+            background: black 20%;
+            #frame {
+                border:           round $border;
+                background:       $surface;
+                margin:           2 4;
+                width:            70;
+                min-height:       15;
+                min-width:        50;
+                scrollbar-gutter: stable;
+            }
+            #logo {
+                text-style: bold;
+            }
+            #text {
+            }
         }
     """
 

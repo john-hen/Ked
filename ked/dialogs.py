@@ -25,6 +25,7 @@ class MessageBox(ModalScreen[None]):
         MessageBox {
             align-horizontal: center;
             align-vertical:   middle;
+            background:       black 20%;
             #frame {
                 width:      auto;
                 max-width:  60;
@@ -84,6 +85,7 @@ class ClickResponse(ModalScreen[str]):
         ClickResponse {
             align-horizontal: center;
             align-vertical:   middle;
+            background:       black 20%;
             #frame {
                 width:      auto;
                 min-width:  60;
@@ -158,6 +160,7 @@ class TextInput(ModalScreen[str]):
         TextInput {
             align-horizontal: center;
             align-vertical:   middle;
+            background:       black 20%;
             #frame {
                 width:      60;
                 border:     round $border;
