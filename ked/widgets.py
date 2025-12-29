@@ -91,3 +91,16 @@ class KeyInput(Label, can_focus=True):
         """Starts key capture when user clicks the widget."""
         if self.has_focus:
             self.capture = True
+
+
+class Spacer(Label):
+    """Blank widget that stretches to fill space"""
+
+    DEFAULT_CSS = """
+        Spacer {
+            width: 1fr;
+        }
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, expand=True)

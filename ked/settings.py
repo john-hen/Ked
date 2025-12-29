@@ -4,6 +4,7 @@ from .        import config
 from .        import bindings
 from .editor  import Editor
 from .widgets import KeyInput
+from .widgets import Spacer
 
 from textual.screen     import ModalScreen
 from textual.widgets    import TabbedContent
@@ -78,7 +79,7 @@ class Settings(ModalScreen):
                     content-align: center middle;
                 }
             }
-            #buttons {
+            #button-row {
                 margin-top: 1;
                 height:     auto;
                 Button {
@@ -174,13 +175,14 @@ class Settings(ModalScreen):
                                 yield KeyInput(key, id=id, classes='input')
                                 yield Label(tooltip, classes='action')
 
-            with Horizontal(id='buttons'):
+            with Horizontal(id='button-row'):
                 yield Button(
                     label   = 'Save',
                     variant = 'primary',
                     action  = 'screen.save',
                     id      = 'save',
                 )
+                yield Spacer()
                 yield Button(
                     label   = 'Cancel',
                     variant = 'default',

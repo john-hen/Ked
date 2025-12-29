@@ -1,6 +1,7 @@
 ﻿"""Pop-up dialogs used throughout the app"""
 
-from . import bindings
+from .        import bindings
+from .widgets import Spacer
 
 from textual.screen     import ModalScreen
 from textual.widgets    import Button
@@ -9,7 +10,6 @@ from textual.widgets    import Input
 from textual.containers import VerticalGroup
 from textual.containers import HorizontalGroup
 from textual.containers import Center
-from textual.containers import Right
 from textual.app        import ComposeResult
 
 from collections.abc import Sequence
@@ -53,6 +53,7 @@ class MessageBox(ModalScreen[None]):
                 margin-top: 2;
             }
             #button {
+                min-width: 12;
             }
         }
     """
@@ -118,17 +119,8 @@ class ClickResponse(ModalScreen[str]):
                 width:      100%;
                 margin-top: 2;
             }
-            .button:first-child {
-                margin-left:  0;
-                margin-right: 4;
-            }
             .button {
-                margin-left:  4;
-                margin-right: 4;
-            }
-            .button:last-child {
-                margin-left:  4;
-                margin-right: 0;
+                min-width: 12;
             }
         }
     """
@@ -149,10 +141,15 @@ class ClickResponse(ModalScreen[str]):
         with VerticalGroup(id='frame'):
             with HorizontalGroup(id='prompt-row'):
                 yield Label(self.prompt, id='prompt', shrink=True)
+            first = True
             with HorizontalGroup(id='button-row'):
                 for (button, variant) in zip(
                     self.buttons, self.variants, strict=True
                 ):
+                    if first:
+                        first = False
+                    else:
+                        yield Spacer()
                     yield Button(
                         button, variant=variant,
                         id=button, classes='button',
@@ -210,6 +207,7 @@ class TextInput(ModalScreen[str]):
                 margin-top: 2;
             }
             .button {
+                min-width: 12;
             }
             #accept {
             }
@@ -251,14 +249,14 @@ class TextInput(ModalScreen[str]):
                     classes = 'button',
                     id      = 'accept',
                 )
-                with Right():
-                    yield Button(
-                        self.cancel_text,
-                        variant = self.cancel_variant,
-                        action  = 'screen.dismiss',
-                        classes = 'button',
-                        id      = 'cancel',
-                    )
+                yield Spacer()
+                yield Button(
+                    self.cancel_text,
+                    variant = self.cancel_variant,
+                    action  = 'screen.dismiss',
+                    classes = 'button',
+                    id      = 'cancel',
+                )
 
     def on_input_submitted(self):
         """Changes focus to first button when user entered a value."""

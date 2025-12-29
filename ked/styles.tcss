@@ -62,8 +62,8 @@ https://textual.textualize.io/guide/design/#base-colors
         }
         .action {
         }
-        #buttons {
-        }
+    }
+    #button-row {
     }
 }
 
@@ -109,11 +109,7 @@ ClickResponse {
     }
     #button-row {
     }
-    .button:first-child {
-    }
     .button {
-    }
-    .button:last-child {
     }
 }
 
