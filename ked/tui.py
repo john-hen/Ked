@@ -9,6 +9,7 @@ from .statusbar import Statusbar
 from .help      import Help
 from .about     import About
 from .settings  import Settings
+from .palette   import UnsortedCommandsProvider
 
 from textual.app      import App
 from textual.app      import ComposeResult
@@ -40,6 +41,7 @@ class TUI(App[str], inherit_bindings=False):
     TITLE     = meta.name
     SUB_TITLE = meta.summary
     BINDINGS  = bindings.application
+    COMMANDS  = {UnsortedCommandsProvider}
     CSS_PATH  = 'styles.tcss'
 
     def compose(self) -> ComposeResult:

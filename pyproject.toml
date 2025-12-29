@@ -105,6 +105,7 @@ ignore = [
     "SIM117",             # nested with statements
     "PT013",              # incorrect pytest import
     "PTH201",             # never use `Path('.')`
+    "RUF012",             # mutable class variable not annotated
     "RUF013",             # implicit `Optional` by assigning `None`
 ]
 allowed-confusables = [
