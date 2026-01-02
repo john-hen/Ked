@@ -87,12 +87,14 @@ class Editor(TextArea, inherit_bindings=False):
             self.load_text(stream.read())
             newlines = stream.newlines
 
+        mixed_newlines = False
         if newlines is None:
             newlines = os.linesep
         elif isinstance(newlines, str):
             pass
         elif isinstance(newlines, tuple):
-            self.app.exit('File contains mixed line endings.', return_code=11)
+            mixed_newlines = True
+            newlines = os.linesep
         else:
             raise TypeError(f'Unexpected type for "newlines": {newlines}')
         self.newline = newlines
@@ -102,6 +104,16 @@ class Editor(TextArea, inherit_bindings=False):
         self.post_message(self.FileLoaded())
         self.saved_as = self.history.undo_stack.copy()
         self.post_message(self.CursorMoved())
+
+        if mixed_newlines:
+            dialog = dialogs.MessageBox(
+                'This file contains mixed line endings. The default line '
+                'endings for this operating system will be used once you '
+                'change and save the file. Or click on the line endings '
+                'indicator in the status bar below to change them.',
+                title='Warning',
+            )
+            self.app.push_screen(dialog)
 
     def on_key(self, _event: Key):
         """Posts message that cursor moved on every key press."""
