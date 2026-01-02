@@ -155,24 +155,36 @@ class LineEndings(Label):
     newline: reactive[str] = reactive('', layout=True)
     """line endings of the file"""
 
+    class Clicked(Message):
+        """Message posted when the widget was clicked"""
+
     def render(self) -> str:
         """Renders the status display of the line endings."""
         match self.newline:
             case '\r\n':
-                self.tooltip = (
+                display = 'CRLF'
+                tooltip = (
                     'Windows-like line endings:\n'
                     'carriage-return plus line-feed'
                 )
-                return 'CRLF'
             case '\n':
-                self.tooltip = (
+                display = 'LF'
+                tooltip = (
                     'Unix-like line endings:\n'
                     'a single line-feed character'
                 )
-                return 'LF'
             case _:
-                self.tooltip = 'Unrecognized line endings.'
-                return self.newline.replace('\r', 'CR').replace('\n', 'LF')
+                display = self.newline.replace('\r', 'CR').replace('\n', 'LF')
+                tooltip = 'Unrecognized line endings.'
+        if tooltip:
+            tooltip += '\n\n'
+        tooltip += '(Click to change.)'
+        self.tooltip = tooltip
+        return display
+
+    def on_click(self):
+        """Posts message when clicked so ancestor widgets can react."""
+        self.post_message(self.Clicked())
 
 
 class CursorPosition(Label):

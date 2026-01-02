@@ -15,6 +15,7 @@ keys:
     "trim_whitespace":    "ctrl+t"
     "toggle_wrapping":    "ctrl+l"
     "change_encoding":    ""
+    "change_newline":     ""
     # Clipboard interaction
     "cut":               "ctrl+x"
     "copy":              "ctrl+c"

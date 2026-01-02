@@ -103,10 +103,18 @@ editor = [
     Binding(
         key         = '<ignore>',
         action      = 'change_encoding',
-        description = 'Change encoding',
+        description = 'Text encoding',
         tooltip     = 'Change text encoding of the file.',
         show        = False,
         id          = 'change_encoding',
+    ),
+    Binding(
+        key         = '<ignore>',
+        action      = 'change_newline',
+        description = 'Line endings',
+        tooltip     = 'Change line endings of the file.',
+        show        = False,
+        id          = 'change_newline',
     ),
 
     # Clipboard interaction

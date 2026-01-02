@@ -252,6 +252,44 @@ class Editor(TextArea, inherit_bindings=False):
         self.action_save()
         self.notify(f'Saved file with text encoding {encoding}.')
 
+    def action_change_newline(self):
+        """Lets the user change the line endings of the file."""
+        options  = ('LF', 'CRLF')
+        tooltips = (
+            'Unix-like line endings (Linux/macOS)',
+            'Windows-like line endings',
+        )
+        match self.newline:
+            case '\n':
+                initial = options[0]
+            case '\r\n':
+                initial = options[1]
+            case _:
+                raise ValueError(f'Unexpected line endings: {self.newline}')
+        dialog = dialogs.SelectOption(
+            options, initial, tooltips,
+            accept_text    = 'Save',
+            accept_tooltip = 'Save file to disk with new line endings.',
+            accept_initial = False,
+        )
+        self.app.push_screen(dialog, self.change_newline)
+
+    def change_newline(self, newline: str):
+        """Changes the line endings of the file."""
+        match newline:
+            case 'LF':
+                new_newline = '\n'
+            case 'CRLF':
+                new_newline = '\r\n'
+            case None:
+                return
+            case _:
+                raise ValueError(f'Unexpected line endings: {newline}')
+        self.newline = new_newline
+        self.post_message(self.NewlineDetected())
+        self.action_save()
+        self.notify(f'Saved file with line endings {newline}.')
+
     def action_cursor_file_start(self):
         """Moves cursor to start of file."""
         self.move_cursor((0, 0))
