@@ -100,6 +100,14 @@ editor = [
         show        = False,
         id          = 'toggle_wrapping',
     ),
+    Binding(
+        key         = '<ignore>',
+        action      = 'change_encoding',
+        description = 'Change encoding',
+        tooltip     = 'Change text encoding of the file.',
+        show        = False,
+        id          = 'change_encoding',
+    ),
 
     # Clipboard interaction
     Binding(

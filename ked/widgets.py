@@ -1,12 +1,18 @@
 """Custom widgets of this application"""
 
-from textual.widgets  import Label
-from textual.reactive import reactive
-from textual.binding  import Binding
-from textual.message  import Message
-from textual.events   import Key
-from textual.events   import MouseDown
-from textual.events   import Blur
+from textual.widgets    import Label
+from textual.widgets    import RadioButton
+from textual.reactive   import reactive
+from textual.containers import VerticalScroll
+from textual.binding    import Binding
+from textual.message    import Message
+from textual.events     import Key
+from textual.events     import Click
+from textual.events     import MouseDown
+from textual.events     import Blur
+from textual.app        import ComposeResult
+
+from typing import Any
 
 
 class KeyInput(Label, can_focus=True):
@@ -91,6 +97,114 @@ class KeyInput(Label, can_focus=True):
         """Starts key capture when user clicks the widget."""
         if self.has_focus:
             self.capture = True
+
+
+class Options(VerticalScroll, can_focus=True, can_focus_children=False):
+    """
+    Widget where user can pick one of several options
+
+    Similar to Textual's `RadioSet`, but changes the selected option when
+    the users presses Up or Down (not just when pressing Space on the focused
+    radio button).
+    """
+
+    class Changed(Message):
+        """Message posted when the selected option changed"""
+        def __init__(self, option: str):
+            self.option  = option
+            """newly selected option"""
+            super().__init__()
+
+    DEFAULT_CSS = """
+        Options {
+            border:     round $border;
+            background: $surface;
+            height:     auto;
+            width:      1fr;
+            padding:    0;
+            &:focus {
+                background-tint: $foreground 5%;
+            }
+            .option {
+                border:     none;
+                background: transparent;
+                margin:     1 0;
+            }
+            .option .toggle--button {
+                background: transparent;
+            }
+            .option.-on {
+                .toggle--button {
+                    color: $primary;
+                }
+                .toggle--label {
+                    text-style: bold;
+                }
+            }
+        }
+    """
+
+    BINDINGS = (
+        ('down', 'select_next'),
+        ('up',   'select_previous'),
+    )
+
+    def __init__(self,
+        options:  list[str],
+        initial:  str,
+        tooltips: list[str] = None,
+        **kwargs: Any,
+    ) -> None:
+        self.options  = options
+        if initial not in options:
+            raise ValueError(
+                'The "selected" option must be one of the "options".'
+            )
+        self.selected = initial
+        if tooltips is None:
+            self.tooltips = [''] * len(options)
+        else:
+            if len(tooltips) != len(options):
+                raise ValueError(
+                    'Pass as many "tooltips" as there are "options".'
+                )
+            self.tooltips = tooltips
+        super().__init__(**kwargs)
+
+    def compose(self) -> ComposeResult:
+        """Composes the list of options."""
+        for (option, tooltip) in zip(self.options, self.tooltips, strict=True):
+            yield RadioButton(option, tooltip=tooltip, classes='option')
+
+    def on_mount(self):
+        """Selects the initial option when widget is created."""
+        self.select(self.selected)
+
+    def select(self, option: str):
+        """Selects one `option`, deselects all others."""
+        with self.prevent(RadioButton.Changed):
+            for button in self.query(RadioButton):
+                button.value = (button.label == option)
+        self.selected = option
+        self.post_message(self.Changed(option))
+
+    def on_click(self, _event: Click):
+        """Focuses the widget when clicked."""
+        self.focus()
+
+    def on_radio_button_changed(self, event: RadioButton.Changed):
+        """Responds to one of the radio buttons being clicked."""
+        self.select(event.radio_button.label)
+
+    def action_select_next(self):
+        """Selects the next option."""
+        index = (self.options.index(self.selected) + 1) % len(self.options)
+        self.select(self.options[index])
+
+    def action_select_previous(self):
+        """Selects the previous option."""
+        index = (self.options.index(self.selected) - 1) % len(self.options)
+        self.select(self.options[index])
 
 
 class Spacer(Label):

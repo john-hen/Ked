@@ -1,6 +1,7 @@
 ﻿"""Pop-up dialogs used throughout the app"""
 
 from .        import bindings
+from .widgets import Options
 from .widgets import Spacer
 
 from textual.screen     import ModalScreen
@@ -151,7 +152,7 @@ class ClickResponse(ModalScreen[str]):
                     else:
                         yield Spacer()
                     yield Button(
-                        button, variant=variant,
+                        label=button, variant=variant,
                         id=button, classes='button',
                     )
 
@@ -223,7 +224,7 @@ class TextInput(ModalScreen[str]):
         accept_variant: str = 'primary',
         cancel_text:    str = 'Cancel',
         cancel_variant: str = 'default',
-        **kwargs: Any,
+        **kwargs:       Any,
     ):
         self.label_text     = label_text
         self.initial_value  = initial_value
@@ -243,7 +244,7 @@ class TextInput(ModalScreen[str]):
                 )
             with HorizontalGroup(id='button-row'):
                 yield Button(
-                    self.accept_text,
+                    label   = self.accept_text,
                     variant = self.accept_variant,
                     action  = 'screen.accept',
                     classes = 'button',
@@ -251,7 +252,7 @@ class TextInput(ModalScreen[str]):
                 )
                 yield Spacer()
                 yield Button(
-                    self.cancel_text,
+                    label   = self.cancel_text,
                     variant = self.cancel_variant,
                     action  = 'screen.dismiss',
                     classes = 'button',
@@ -266,3 +267,116 @@ class TextInput(ModalScreen[str]):
         """Reports the value of the input widget to the caller."""
         input = self.query_exactly_one('#input', expect_type=Input)
         self.dismiss(input.value)
+
+
+class SelectOption(ModalScreen[str]):
+    """
+    Dialog letting user select one option out of several
+
+    Pass in the `options` as a tuple of strings, the `initial` option selected
+    at the start, and optional tooltips to be show when hovering over the
+    options with the mouse.
+
+    By default, an "Okay" button will be shown in the "primary" variant that
+    the user can press to accept their own choice and proceed, as well as a
+    "Cancel" button they can press to abort. Pressing the Esc key has the same
+    effect.
+
+    Create the input dialog by passing an instance of this class to
+    `app.push_screen()` along with a callback function. The latter will be
+    called with the value of the selected option as its `result` parameter
+    after the accept button was pressed.
+    """
+
+    BINDINGS = bindings.dialog
+
+    DEFAULT_CSS = """
+        SelectOption {
+            align-horizontal: center;
+            align-vertical:   middle;
+            background:       black 20%;
+            #frame {
+                width:   36;
+                border:  round $border;
+                padding: 1 2;
+            }
+            #options {
+                border: round $border;
+            }
+            .option {
+            }
+            #button-row {
+                margin-top: 2;
+            }
+            .button {
+                min-width: 12;
+            }
+            #accept {
+            }
+            #cancel {
+            }
+        }
+    """
+
+    def __init__(self,
+        options:        tuple[str, ...],
+        initial:        str,
+        tooltips:       tuple[str, ...] = None,
+        accept_text:    str             = 'Okay',
+        accept_variant: str             = 'primary',
+        accept_tooltip: str             = '',
+        cancel_text:    str             = 'Cancel',
+        cancel_variant: str             = 'default',
+        cancel_tooltip: str             = '',
+        accept_initial: bool            = True,
+        **kwargs:       Any,
+    ):
+        self.options        = options
+        self.initial        = initial
+        self.tooltips       = tooltips
+        self.accept_text    = accept_text
+        self.accept_tooltip = accept_tooltip
+        self.accept_variant = accept_variant
+        self.cancel_text    = cancel_text
+        self.cancel_tooltip = cancel_tooltip
+        self.cancel_variant = cancel_variant
+        self.accept_initial = accept_initial
+        super().__init__(**kwargs)
+
+    def compose(self) -> ComposeResult:
+        """Composes the dialog."""
+        with VerticalGroup(id='frame'):
+            yield Options(
+                options  = self.options,
+                initial  = self.initial,
+                tooltips = self.tooltips,
+                id       = 'options',
+            )
+            with HorizontalGroup(id='button-row'):
+                yield Button(
+                    label   = self.accept_text,
+                    tooltip = self.accept_tooltip or None,
+                    variant = self.accept_variant,
+                    action  = 'screen.accept',
+                    classes = 'button',
+                    id      = 'accept',
+                )
+                yield Spacer()
+                yield Button(
+                    label   = self.cancel_text,
+                    tooltip = self.cancel_tooltip or None,
+                    variant = self.cancel_variant,
+                    action  = 'screen.dismiss',
+                    classes = 'button',
+                    id      = 'cancel',
+                )
+
+    def on_options_changed(self, message: Options.Changed):
+        """Enables or disables accept button when selected option changed."""
+        accept = self.query_exactly_one('#accept', expect_type=Button)
+        accept.disabled = (message.option == self.initial)
+
+    def action_accept(self):
+        """Reports the selected option to the caller."""
+        options = self.query_exactly_one('#options', expect_type=Options)
+        self.dismiss(options.selected)

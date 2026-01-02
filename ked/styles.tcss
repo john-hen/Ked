@@ -131,3 +131,20 @@ TextInput {
     #cancel {
     }
 }
+
+SelectOption {
+    #frame {
+    }
+    #options {
+    }
+    .option {
+    }
+    #button-row {
+    }
+    .button {
+    }
+    #accept {
+    }
+    #cancel {
+    }
+}

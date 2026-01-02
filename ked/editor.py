@@ -214,6 +214,44 @@ class Editor(TextArea, inherit_bindings=False):
         """Toggles soft-wrapping of lines."""
         self.soft_wrap = not self.soft_wrap
 
+    def action_change_encoding(self):
+        """Lets the user change the text encoding of the file."""
+        options  = ('UTF-8', 'UTF-8-BOM')
+        tooltips = (
+            'UTF-8 Unicode encoding',
+            'UTF-8 encoding with byte-order mark',
+        )
+        match self.encoding:
+            case 'utf-8':
+                initial = options[0]
+            case 'utf-8-sig':
+                initial = options[1]
+            case _:
+                raise ValueError(f'Unexpected encoding: {self.encoding}')
+        dialog = dialogs.SelectOption(
+            options, initial, tooltips,
+            accept_text    = 'Save',
+            accept_tooltip = 'Save file to disk with new encoding.',
+            accept_initial = False,
+        )
+        self.app.push_screen(dialog, self.change_encoding)
+
+    def change_encoding(self, encoding: str):
+        """Changes the text encoding of the file."""
+        match encoding:
+            case 'UTF-8':
+                new_encoding = 'utf-8'
+            case 'UTF-8-BOM':
+                new_encoding = 'utf-8-sig'
+            case None:
+                return
+            case _:
+                raise ValueError(f'Unexpected encoding: {encoding}')
+        self.encoding = new_encoding
+        self.post_message(self.EncodingDetected())
+        self.action_save()
+        self.notify(f'Saved file with text encoding {encoding}.')
+
     def action_cursor_file_start(self):
         """Moves cursor to start of file."""
         self.move_cursor((0, 0))

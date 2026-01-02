@@ -4,8 +4,9 @@ from textual.widgets         import Footer
 from textual.widgets._footer import FooterKey
 from textual.widgets         import Label
 from textual.containers      import Horizontal
-from textual.app             import ComposeResult
 from textual.reactive        import reactive
+from textual.message         import Message
+from textual.app             import ComposeResult
 
 from pathlib import Path
 
@@ -108,17 +109,37 @@ class TextEncoding(Label):
     encoding: reactive[str] = reactive('', layout=True)
     """text encoding of the file"""
 
+    class Clicked(Message):
+        """Message posted when the widget was clicked"""
+
     def render(self) -> str:
         """Renders the status display of the text encoding."""
         match self.encoding:
             case 'utf-8':
-                self.tooltip = 'Text encoding is UTF-8.'
-                return 'UTF-8'
+                display = 'UTF-8'
+                tooltip = 'Text encoding is UTF-8 Unicode.'
             case 'utf-8-sig':
-                self.tooltip = 'Text encoding is UTF-8 with a byte-order mark.'
-                return 'UTF8-BOM'
+                display = 'UTF-8-BOM'
+                tooltip = 'Text encoding is UTF-8 with a byte-order mark.'
             case _:
-                return self.encoding
+                display = self.encoding
+                tooltip = ''
+        if tooltip:
+            tooltip += '\n\n'
+        tooltip += '(Click to change.)'
+        self.tooltip = tooltip
+        return display
+
+    def on_click(self):
+        """Posts message when clicked so ancestor widgets can react."""
+        # For reasons I don't fully understand, calling
+        # `self.app.editor.action_change_encoding()` doesn't really work here.
+        # Nor does awaiting `run_action()` of either this widget, the app, or
+        # editor widget. They do bring up the dialog, but then the callback
+        # function `editor.change_encoding()` never gets called. It may be
+        # because we should follow "attributes down, messages up", but not
+        # sure. See: https://textual.textualize.io/guide/widgets/#data-flow
+        self.post_message(self.Clicked())
 
 
 class LineEndings(Label):

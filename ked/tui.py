@@ -89,6 +89,10 @@ class TUI(App[str], inherit_bindings=False):
         """Propagates new cursor position to status bar."""
         self.cursor = self.editor.cursor_location
 
+    def on_text_encoding_clicked(self):
+        """Runs `editor.change_encoding` action when status display clicked."""
+        self.editor.action_change_encoding()
+
     def configure_keys(self):
         """Maps keys as specified in configuration files."""
         keymap = {
@@ -211,7 +215,6 @@ class TUI(App[str], inherit_bindings=False):
 
     def quit_unsaved_changes(self, answer: str):
         """Reacts to how the user wants to deal with unsaved changes."""
-        self.log(f'answer: {answer}')
         match answer:
             case 'Save':
                 self.editor.action_save()
