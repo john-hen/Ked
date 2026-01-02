@@ -89,6 +89,10 @@ class TUI(App[str], inherit_bindings=False):
         """Propagates new cursor position to status bar."""
         self.cursor = self.editor.cursor_location
 
+    def on_file_name_clicked(self):
+        """Runs `editor.save_as` action when file name in footer clicked."""
+        self.editor.action_save_as()
+
     def on_text_encoding_clicked(self):
         """Runs `editor.change_encoding` action when status display clicked."""
         self.editor.action_change_encoding()

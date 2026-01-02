@@ -94,6 +94,9 @@ class FileName(Label):
     file: reactive[Path | None] = reactive(None, layout=True)
     """file currently being edited"""
 
+    class Clicked(Message):
+        """Message posted when the widget was clicked"""
+
     def render(self) -> str:
         """Renders the status display of the file name."""
         if self.file is None:
@@ -101,6 +104,10 @@ class FileName(Label):
             return ''
         self.tooltip = str(self.file)
         return self.file.name
+
+    def on_click(self):
+        """Posts message when clicked so ancestor widgets can react."""
+        self.post_message(self.Clicked())
 
 
 class TextEncoding(Label):
