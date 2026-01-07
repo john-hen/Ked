@@ -2,7 +2,7 @@
 
 [project]
 name        = "Ked"
-version     = "0.6.0"
+version     = "0.6.1"
 authors     = [{name = "John Hennig"}]
 description = "simple text editor for the terminal"
 keywords    = ["editor", "terminal"]
