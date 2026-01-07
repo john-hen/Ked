@@ -99,7 +99,7 @@ class TUI(App[str], inherit_bindings=False):
 
     def on_line_endings_clicked(self):
         """Runs `editor.change_newline` action when status display clicked."""
-        self.editor.action_change_encoding()
+        self.editor.action_change_newline()
 
     def configure_keys(self):
         """Maps keys as specified in configuration files."""
