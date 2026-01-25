@@ -14,18 +14,16 @@ from rich.text          import Text
 
 
 logo = rf"""
-     ___           ___          {version}
-    /|  |         /\__\         _____
-   |:|  |        /:/ _/_       /::\  \
-   |:|  |       /:/ /\__\     /:/\:\  \
- __|:|  |      /:/ /:/ _/_   /:/  \:\__\
-/\ |:|__|____ /:/_/:/ /\__\ /:/__/ \:|__|
-\:\/:::::/__/ \:\/:/ /:/  / \:\  \ /:/  /
- \::/~~/~      \::/_/:/  /   \:\  /:/  /
-  \:\~~\        \:\/:/  /     \:\/:/  /
-   \:\__\        \::/  /       \::/  /
-    \/__/         \/__/         \/__/
-        Copyright © John Hennig
+╭─╮  ╭─╮           ╭─╮
+│ │ ╭╯╭╯           │ │
+│ │╭╯╭╯            │ │
+│ ╰╯╭╯  ╭─────╮╭───╯ │
+│   │   │ ╭─╮ ││ ╭─╮ │
+│ ╭╮╰╮  │ ╰─╯ ││ │ │ │
+│ │╰╮╰╮ │ ╭───╯│ │ │ │
+│ │ ╰╮╰╮│ ╰───╮│ ╰─╯ │
+╰─╯  ╰─╯╰─────╯╰─────╯  {version}
+Copyright © John Hennig
 """.lstrip('\n')
 
 text = """
@@ -106,7 +104,7 @@ class About(ModalScreen):
         with VerticalScroll(id='frame') as frame:
             frame.border_title = 'About'
             with Center():
-                label = horizonal_gradient(
+                label = vertical_gradient(
                     logo,
                     start = Color.parse(self.app.theme_variables['primary']),
                     end   = Color.parse(self.app.theme_variables['accent']),
@@ -129,7 +127,7 @@ def vertical_gradient(text: str, start: Color, end: Color) -> Label:
     return Label(styled_text)
 
 
-def horizonal_gradient(text: str, start: Color, end: Color) -> Label:
+def horizontal_gradient(text: str, start: Color, end: Color) -> Label:
     """Colors the text with a horizontal gradient along the columns."""
     gradient = Gradient((0, start), (1, end))
     lines = text.splitlines(keepends=True)
